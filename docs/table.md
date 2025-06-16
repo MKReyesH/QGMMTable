@@ -8,7 +8,7 @@ This is the table
 <ul>
 {% for element in site.data.data %}
 	<li>
-	{{ member.a }}
+	{{ element.a }}
 	</li>
 {% endfor %}
 </ul>
