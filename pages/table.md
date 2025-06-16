@@ -7,7 +7,7 @@ This is the table
 
 <!--Static database table-->
 <table>
-{% for row in site.database %}
+{% for row in site.data.database %}
 	<!--Table header-->
 	{% if forloop.first %}
 	<tr>
