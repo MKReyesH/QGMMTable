@@ -27,5 +27,33 @@ This is the table
 
 <!--Dynamic table-->
 <script>
-$('#datatable').DataTable()
+$('#datatable').DataTable({
+	initComplete: function () {
+		this.api()
+			.columns()
+			.every(function () {
+				var column = this;
+ 
+				// Create select element and listener
+				var select = $('<select><option value=""></option></select>')
+				.appendTo($(column.header()).empty())
+				.on('change', function () {
+							column
+							.search($(this).val(), {exact: true})
+							.draw();
+				});
+ 
+				// Add list of options
+				column
+					.data()
+					.unique()
+					.sort()
+					.each(function (d, j) {
+						select.append(
+							'<option value="' + d + '">' + d + '</option>'
+						);
+					});
+			});
+	}
+});
 </script>
