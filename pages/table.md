@@ -6,7 +6,6 @@ title: Table
 This is the table
 
 <!--Static table-->
-<div id="column-filters" class="dataTables_wrapper"></div>
 <table id="datatable" class="display">
 	<thead>
 		<tr>
@@ -29,24 +28,30 @@ This is the table
 <!--Dynamic table-->
 <script>
 $('#datatable').DataTable({
+
 	initComplete: function () {
-		this.api()
-			.columns([0,1])
-			.every(function () {
-				var column = this;
-				var header = column.header();
-				var columnIndex = column.index();
+		
+		var api = this.api();
+		
+		var thead = $(api.table().header());
+		var filterRow = $('<tr>').appendTo(thead);
+		
+		api.columns().every(function (colIdx) {
+			
+			var column = this;
+			var headerText = $(column.header()).text();
+			var filterCell = $('<th>').appendTo(filterRow);
+			
+			if (colIdx === 0 || colIdx === 1) {
 				
-				var filterContainer = $('<div class="column-filter-item"></div>');
-				filterContainer.append('<span>' + $(header).text() + ': </span>');
- 
-				var select = $('<select><option value="">All</option></select>')
-				.appendTo(filterContainer)
+				var select = $('<select><option value="">All ' + headerText + '</option></select>')
+				.appendTo(filterCell)
 				.on('change', function () {
-							column
-							.search($(this).val(), {exact: true})
-							.draw();
-				});
+					var val = $(this).val();
+					column
+						.search(val ? '^' + val + '$' : '', true, false)
+						.draw();
+				};
 				
 				column
 					.data()
@@ -57,9 +62,16 @@ $('#datatable').DataTable({
 							'<option value="' + d + '">' + d + '</option>'
 						);
 					});
-					
-				$('#column-filters').append(filterContainer);
-			});
+				
+			} else {
+				
+				filterCell.html('&nbsp;');
+				
+			}
+			 
+		};
+		
 	}
+	
 });
 </script>
