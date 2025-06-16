@@ -24,3 +24,6 @@ This is the table
 	{% endtablerow %}
 {% endfor %}
 </table>
+<script>
+$('#datatable').DataTable()
+</script>
