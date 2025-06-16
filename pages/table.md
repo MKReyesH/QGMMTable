@@ -6,6 +6,7 @@ title: Table
 This is the table
 
 <!--Static table-->
+<div id="column-filters" class="dataTables_wrapper"></div>
 <table id="datatable" class="display">
 	<thead>
 		<tr>
@@ -33,9 +34,14 @@ $('#datatable').DataTable({
 			.columns([0,1])
 			.every(function () {
 				var column = this;
+				var header = column.header();
+				var columnIndex = column.index();
+				
+				var filterContainer = $('<div class="column-filter-item"></div>');
+				filterContainer.append('<span>' + $(header).text() + ': </span>');
  
-				var select = $('<select><option value="">[ALL]</option></select>')
-				.appendTo($(column.header()).empty())
+				var select = $('<select><option value="">All</option></select>')
+				.appendTo(filterContainer)
 				.on('change', function () {
 							column
 							.search($(this).val(), {exact: true})
@@ -51,6 +57,8 @@ $('#datatable').DataTable({
 							'<option value="' + d + '">' + d + '</option>'
 						);
 					});
+					
+				$('#column-filters').append(filterContainer);
 			});
 	}
 });
