@@ -5,6 +5,7 @@ title: Table
 
 This is the table
 
+<!--Static database table-->
 <table>
 {% for row in site.data.database %}
 	<!--Table header-->
