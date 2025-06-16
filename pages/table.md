@@ -19,13 +19,15 @@ This is the table
 		{% endif %}
 	</thead>
 	<!--Table rows-->
-	<tbody>
 	{% tablerow pair in row %}
 		{{ pair[1] }}
 	{% endtablerow %}
-	</tbody>
 {% endfor %}
 </table>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css"/>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>  
 <script>
 $('#datatable').DataTable();
 </script>
