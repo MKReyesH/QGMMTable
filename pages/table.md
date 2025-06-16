@@ -5,8 +5,8 @@ title: Table
 
 This is the table
 
-<!--Database table-->
-<table class="display">
+<!--Static table-->
+<table id="datatable" class="display">
 {% for row in site.data.database %}
 	<!--Table header-->
 	<thead>
@@ -24,6 +24,3 @@ This is the table
 	{% endtablerow %}
 {% endfor %}
 </table>
-<script>
-$('table.display').DataTable()
-</script>
