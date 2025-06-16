@@ -6,7 +6,7 @@ title: Table
 This is the table
 
 <!--Static database table-->
-<table class="display">
+<table id="datatable" class="display">
 {% for row in site.data.database %}
 	<!--Table header-->
 	<thead>
@@ -19,8 +19,10 @@ This is the table
 		{% endif %}
 	</thead>
 	<!--Table rows-->
+	<tbody>
 	{% tablerow pair in row %}
 		{{ pair[1] }}
 	{% endtablerow %}
+	</tbody>
 {% endfor %}
 </table>
