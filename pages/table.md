@@ -36,7 +36,7 @@ $('#datatable').DataTable({
  
                 // Create select element and listener
                 var select = $('<select><option value=""></option></select>')
-                    .appendTo($(column.footer()).empty())
+                    .appendTo($(column.header()).empty())
                     .on('change', function () {
                         column
                             .search($(this).val(), {exact: true})
