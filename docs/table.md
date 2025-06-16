@@ -14,6 +14,7 @@ This is the table
 		<th>{{ pair[0] }}</th>
 		{% endfor %}
 	</tr>
+	{% endif %}
 	<!--Table rows-->
 	{% tablerow pair in row %}
 		{{ pair[1] }}
