@@ -30,12 +30,12 @@ This is the table
 $('#datatable').DataTable({
 	initComplete: function () {
 		this.api()
-			.columns([0, 1])
+			.columns()
 			.every(function () {
 				var column = this;
  
 				// Create select element and listener
-				var select = $('<select><option value=""></option></select>')
+				var select = $('<select><option value="">Show all</option></select>')
 				.appendTo($(column.footer()).empty())
 				.on('change', function () {
 							column
