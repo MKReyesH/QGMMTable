@@ -27,8 +27,7 @@ This is the table
 
 <!--Dynamic table-->
 <script>
-$(document).ready(function() {
-    var table = $('#datatable').DataTable({
+$('#datatable').DataTable({
         // You might want to adjust other DataTables options here, e.g.:
         // "paging": true,
         // "ordering": true,
@@ -87,5 +86,4 @@ $(document).ready(function() {
             });
         }
     });
-});
 </script>
