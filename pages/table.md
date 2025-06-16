@@ -34,8 +34,7 @@ $('#datatable').DataTable({
 			.every(function () {
 				var column = this;
  
-				// Create select element and listener
-				var select = $('<select><option value="">Show all</option></select>')
+				var select = $('<select><option value=""></option></select>')
 				.appendTo($(column.footer()).empty())
 				.on('change', function () {
 							column
@@ -43,7 +42,6 @@ $('#datatable').DataTable({
 							.draw();
 				});
  
-				// Add list of options
 				column
 					.data()
 					.unique()
