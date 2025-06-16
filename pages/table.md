@@ -28,32 +28,30 @@ This is the table
 <!--Dynamic table-->
 <script>
 $('#datatable').DataTable({
-    initComplete: function () {
-        this.api()
-            .columns()
-            .every(function () {
-                var column = this;
+	initComplete: function () {
+		this.api()
+			.columns([0,1])
+			.every(function () {
+				var column = this;
  
-                // Create select element and listener
-                var select = $('<select><option value=""></option></select>')
-                    .appendTo($(column.header()).empty())
-                    .on('change', function () {
-                        column
-                            .search($(this).val(), {exact: true})
-                            .draw();
-                    });
- 
-                // Add list of options
-                column
-                    .data()
-                    .unique()
-                    .sort()
-                    .each(function (d, j) {
-                        select.append(
-                            '<option value="' + d + '">' + d + '</option>'
-                        );
-                    });
-            });
-    }
-})
+				var select = $('<select><option value="">[ALL]</option></select>')
+				.appendTo($(column.header()).empty())
+				.on('change', function () {
+							column
+							.search($(this).val(), {exact: true})
+							.draw();
+				});
+				
+				column
+					.data()
+					.unique()
+					.sort()
+					.each(function (d, j) {
+						select.append(
+							'<option value="' + d + '">' + d + '</option>'
+						);
+					});
+			});
+	}
+});
 </script>
