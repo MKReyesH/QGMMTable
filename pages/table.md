@@ -31,9 +31,15 @@ $(document).ready(function() {
 
 	//Columns which filter button
 	var filterColumnIndexes = [0, 1];
+	
+	//Number of rows entries per page
+	var rowsPerPage = 30;
 
 	//Dynamic table rendering
 	var table = $('#datatable').DataTable({
+		
+		"lengthChange": false,
+		"pageLength": rowsPerPage,
 
 		initComplete: function () {
 		
