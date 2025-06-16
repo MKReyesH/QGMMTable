@@ -1,2 +1,3 @@
 # About
-Page containing experimental bounds on quantum gravity searches
+
+Made by Maykoll A. Reyes (@MKReyesH)

@@ -1,2 +1,3 @@
-# Index
-Page containing experimental bounds on quantum gravity searches
+# Welcome
+
+Welcome to the landing page.
