@@ -25,5 +25,8 @@ This is the table
 {% endfor %}
 </table>
 <script>
-$('table.display').DataTable()
+$('table.display').DataTable({
+	paging:true,
+	ordering:true
+})
 </script>
