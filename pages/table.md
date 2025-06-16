@@ -9,14 +9,14 @@ This is the table
 <table>
 {% for row in site.data.database %}
 	<!--Table header-->
-	{% if forloop.first %}
 	<thead>
-	<tr>
-		{% for pair in row %}
-		<th>{{ pair[0] }}</th>
-		{% endfor %}
-	</tr>
-	{% endif %}
+		{% if forloop.first %}
+		<tr>
+			{% for pair in row %}
+				<th>{{ pair[0] }}</th>
+			{% endfor %}
+		</tr>
+		{% endif %}
 	</thead>
 	<!--Table rows-->
 	{% tablerow pair in row %}
