@@ -26,4 +26,6 @@ This is the table
 	</tbody>
 {% endfor %}
 </table>
+<script>
 $('#datatable').DataTable();
+</script>
