@@ -24,9 +24,3 @@ This is the table
 	{% endtablerow %}
 {% endfor %}
 </table>
-<script>
-$('table.display').DataTable({
-	paging:true,
-	ordering:true
-})
-</script>
