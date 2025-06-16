@@ -6,7 +6,7 @@ title: Table
 This is the table
 
 <!--Static database table-->
-<table id="datatable" class="display">
+<table class="display">
 {% for row in site.data.database %}
 	<!--Table header-->
 	<thead>
@@ -24,8 +24,6 @@ This is the table
 	{% endtablerow %}
 {% endfor %}
 </table>
-
-<!--Dynamic database table-->
 <script>
-$('#datatable').DataTable();
+$('table.display').DataTable()
 </script>
