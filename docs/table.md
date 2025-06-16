@@ -18,6 +18,5 @@ This is the table
 	{% tablerow pair in row %}
 		{{ pair[1] }}
 	{% endtablerow %}
-	{% endfor %}
 {% endfor %}
 </table>
