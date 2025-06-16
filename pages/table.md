@@ -30,13 +30,13 @@ This is the table
 $('#datatable').DataTable({
 	initComplete: function () {
 		this.api()
-			.columns()
+			.columns([0, 1])
 			.every(function () {
 				var column = this;
  
 				// Create select element and listener
 				var select = $('<select><option value=""></option></select>')
-				.appendTo($(column.header()).empty())
+				.appendTo($(column.footer()).empty())
 				.on('change', function () {
 							column
 							.search($(this).val(), {exact: true})
