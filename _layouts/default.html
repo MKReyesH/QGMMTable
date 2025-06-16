@@ -1,24 +1,31 @@
 <!doctype html>
 <html>
-  <head>
-  
-    <meta charset="utf-8">
-    <title>{{ page.title }}</title>
+    <head>
     
-    <!--LaTeX support-->
-    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script> MathJax = { tex: { inlineMath: [['$', '$']] } }; </script>
+        <meta charset="utf-8">
+        
+        <!--Page title-->
+        <title>{{ page.title }}</title>
     
-    <!--DataTables support-->
-    {% if page.title == "Table" %}
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" />
-    {% endif %}
+        <!--LaTeX support-->
+        <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script> MathJax = { tex: { inlineMath: [['$', '$']] } }; </script>
     
-  </head>
-  <body>
-    {% include navbar.html %}
-    {{ content }}
-  </body>
-</html>
+        <!--DataTables support-->
+        {% if page.title == "Table" %}
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" />
+        {% endif %}
+    
+    </head>
+    <body>
+    
+        <!--Navigation bar-->
+        {% include navbar.html %}
+        
+        <!--Page content-->
+        {{ content }}
+        
+    </body>
+</html> s
