@@ -57,13 +57,26 @@ $(document).ready(function() {
 			topStart: {
 				buttons: [
 					{
-						extend: 'copyHtml5',
+						extend: 'copy',
 						exportOptions: {
 							 orthogonal: 'export'
 						}
 					},
 					{
-						extend: 'csvHtml5',
+						extend: 'csv',
+						exportOptions: {
+							 orthogonal: 'export'
+						},
+						fieldBoundary: ''
+					},
+					{
+						extend: 'excel',
+						exportOptions: {
+							 orthogonal: 'export'
+						}
+					},
+					{
+						extend: 'pdf',
 						exportOptions: {
 							 orthogonal: 'export'
 						}
