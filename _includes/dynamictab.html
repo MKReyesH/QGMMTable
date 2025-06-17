@@ -65,6 +65,7 @@ $(document).ready(function() {
 				"targets": numberColumnIndexes,
 				"type": "num",
 				"render": function (data, type, row, meta) {
+					console.log("Render called. Type:", type, "Data:", data);
 					let numericData = parseFloat(data);
 					
 					if (isNaN(numericData)) {
