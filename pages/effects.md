@@ -33,4 +33,6 @@ int suma (){
 
 Finally, one can also insert `html` code directly:
 
-<iframe width="80%" src="https://www.youtube.com/embed/..." frameborder="0" allowfullscreen></iframe>
+<div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%">
+	<iframe src="https://www.youtube.com/embed/..." width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+</div>
