@@ -30,9 +30,3 @@ int suma (){
   return a+b;
 }
 ```
-
-Finally, one can also insert `html` code directly:
-
-<div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%">
-	<iframe src="https://www.youtube.com/embed/..." width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
-</div>
