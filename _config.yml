@@ -1,4 +1,18 @@
-remote_theme: pages-themes/cayman@v0.2.0
+remote_theme: tuur29/pages-themes-cayman
 
-plugins:
-- jekyll-remote-theme
+#logo_url: ./logo.png
+colors:
+    gradient_left: "#155799"
+    gradient_right: "#159957"
+    header: "#fff"
+    android_theme: "#000" # this default to gradient_color
+    link: "#1e6bb8" # this default to gradient_color
+    section_title: "#155799" # this default to gradient_color
+buttons:
+      zip_url: http://example.com/
+      zip_title: Title
+      zip_hide: true
+      tar_url: http://example.com/
+      tar_title: Title
+      tar_hide: true
+      github_hide: true
