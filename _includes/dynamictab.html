@@ -90,11 +90,7 @@ $(document).ready(function() {
 				});
 			});
 			
-			if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
-				MathJax.typesetPromise([api.table().node()]).catch(function(err) {
-					console.error("MathJax typesetting error:", err);
-				});
-			} 
+
 			
 		},
 
