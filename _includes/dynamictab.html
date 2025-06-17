@@ -88,7 +88,7 @@ $(document).ready(function() {
 				api.cells(rowNode, '').every(function(cellInfo) {
 					if (cellInfo.column >= firstNumColumn) {
 						var originalData = this.data();
-						var formattedData = numberToLaTeX(originalData, cellInfo.column);
+						var formattedData = numberToLaTeX(originalData);
 						$(this.node()).html(formattedData);
 					}
 				});
