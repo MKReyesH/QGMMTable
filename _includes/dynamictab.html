@@ -33,6 +33,31 @@ $(document).ready(function() {
 		
 		"lengthChange": false,
 		"pageLength": rowsPerPage,
+		"searching": true,
+		
+		"columnDefs": [
+			{
+				"targets": [2, 3, 4],
+				"render": function (data, type, row, meta) {
+					if (type === 'display' && typeof data === 'number') {
+						if (data === 0) {
+							return "0"; // Handle zero separately to avoid "0e+0"
+						}
+                        
+						const formatted = new Intl.NumberFormat('en-US', {
+							notation: 'scientific',
+							minimumFractionDigits: 2, // Adjust precision as needed
+							maximumFractionDigits: 2  // Adjust precision as needed
+						}).format(data);
+
+						return formatted.replace('e+', ' x 10^').replace('e-', ' x 10^-');
+
+					}
+
+                    return data;
+				}
+			}
+		],
 
 		initComplete: function () {
 		
