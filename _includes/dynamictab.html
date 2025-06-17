@@ -28,6 +28,7 @@ $(document).ready(function() {
 	//Number of rows entries per page
 	var rowsPerPage = 30;
 	
+	//Display numbers as LaTeX
 	function formatScientific(num, precision = 2) {
 		if (num === 0) {
 			return "$0$"; // Return "0" within MathJax delimiters
@@ -58,6 +59,7 @@ $(document).ready(function() {
 		
 		"columnDefs": [
 			{
+				//Set columns which are numbers
 				"targets": [2, 3, 4],
 				"type": "num",
 				"render": function (data, type, row, meta) {
@@ -69,6 +71,13 @@ $(document).ready(function() {
 				}
 			}
 		],
+		
+		//To update LaTeX number rendering
+		"drawCallback": function( settings ) {
+			if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
+				MathJax.typesetPromise();
+			}
+		},
 
 		initComplete: function () {
 		
