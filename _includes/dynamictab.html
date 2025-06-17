@@ -27,6 +27,27 @@ $(document).ready(function() {
 	
 	//Number of rows entries per page
 	var rowsPerPage = 30;
+	
+	function formatScientific(num, precision = 2) {
+		if (num === 0) {
+			return "$0$"; // Return "0" within MathJax delimiters
+		}
+
+		const expStr = num.toExponential(precision); 
+		const parts = expStr.split('e');
+		let mantissa = parts[0];
+		let exponent = parseInt(parts[1], 10);
+
+		let latexString;
+
+		if (exponent === 0) {
+			latexString = `$${mantissa}$`; 
+		} else {
+			latexString = `$${mantissa} \\times 10^{${exponent}}$`;
+        }
+
+		return latexString;
+	}
 
 	//Dynamic table rendering
 	var table = $('#datatable').DataTable({
@@ -41,33 +62,9 @@ $(document).ready(function() {
 				"type": "num",
 				"render": function (data, type, row, meta) {
 					let numericData = parseFloat(data);
-					
 					if (type === 'display' && !isNaN(numericData)) {
-						if (data === 0) {
-							return "0"; // Handle zero separately to avoid "0e+0"
-						}
-                        
-						const formatted = new Intl.NumberFormat('en-US', {
-							notation: 'scientific',
-							minimumFractionDigits: 2, // Adjust precision as needed
-							maximumFractionDigits: 2  // Adjust precision as needed
-						}).format(data);
-
-						const regex = /([+\-]?[\d.]+)[Ee]([+\-]?\d+)/;
-						const match = formatted.match(regex);
-						
-						if (match) {
-							const base = match[1];
-							const exponent = match[2];
-
-							const cleanExponent = exponent.startsWith('+') ? exponent.substring(1) : exponent;
-							return `${base} x 10^${cleanExponent}`;
-						} else {
-							return formatted; 
-						}
-
+						return formatScientific(numericData, 2);
 					}
-
                     return data;
 				}
 			}
