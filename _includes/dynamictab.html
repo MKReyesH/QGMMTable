@@ -22,8 +22,11 @@
 <script>
 $(document).ready(function() {
 
+	//Columns which LaTeX number rendering
+	var numberColumnIndexes = [3, 4, 5];
+
 	//Columns which filter button
-	var filterColumnIndexes = [0, 1];
+	var filterColumnIndexes = [0, 1, 2];
 	
 	//Number of rows entries per page
 	var rowsPerPage = 30;
@@ -53,7 +56,7 @@ $(document).ready(function() {
 		"columnDefs": [
 			{
 				//Set columns which are numbers
-				"targets": [2, 3, 4],
+				"targets": numberColumnIndexes,
 				"type": "num",
 				"render": function (data, type, row, meta) {
 					let numericData = parseFloat(data);
