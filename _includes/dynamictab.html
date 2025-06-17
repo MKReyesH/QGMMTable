@@ -20,52 +20,6 @@
 
 <!--Dynamic table using js-->
 <script>
-function numberToLaTeX(value) {
-
-	let num = parseFloat(value);
-
-	// If not a number, do nothing
-    if (isNaN(num) || value === null || value.trim() === "") {
-        return value;
-    }
-
-	// If zero, return zero
-    if (num === 0) {
-        return "$0$";
-    }
-
-    // Convert the number to a scientific notation
-    let scientificString = num.toExponential(2);
-
-    // Regex to extract mantissa, exponent sign, and exponent value.
-    let parts = scientificString.match(/^(-?\d+\.?\d*)[eE]([+-]?)(\d+)$/);
-    
-    // If fails, return value
-    if (!parts) {
-    	return value;
-    }
-
-    let mantissa = parts[1];
-	let sign = parts[2];
-	let exponent = parseInt(parts[3], 10);
-
-    // If the exponet is zero, return just the mantisa
-    if (exponent === 0) {
-        return `$${mantissa}$`;
-    }
-
-    let latexExponentStr = exponent.toString();
-    if (sign === '-') {
-        latexExponentStr = '-' + latexExponentStr;
-    }
-    
-	if (parseFloat(mantissa) === 1) {
-		return `$10^{${latexExponentStr}}$`;
-	}
-	
-	return `$${mantissa} \\times 10^{${latexExponentStr}}$`;
-}
-
 $(document).ready(function() {
 
 	//Columns which filter button
@@ -79,28 +33,6 @@ $(document).ready(function() {
 		
 		"lengthChange": false,
 		"pageLength": rowsPerPage,
-		
-		"drawCallback": function(settings) {
-			var api = this.api();
-
-			api.rows({ page: 'current' }).every(function() {
-				var rowNode = this.node();
-
-				api.cells(rowNode, '').every(function(cellInfo) {
-						var originalData = this.data();
-						var formattedData = numberToLaTeX(originalData);
-						
-						$(this.node()).html(formattedData);
-				});
-			});
-			
-			if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
-				MathJax.typesetPromise([api.table().node()]).catch(function(err) {
-					console.error("MathJax typesetting error:", err);
-				});
-			} 
-			
-		},
 
 		initComplete: function () {
 		
