@@ -61,9 +61,9 @@ function numberToLaTeX(value) {
     
 	if (parseFloat(mantissa) === 1) {
 		return `$10^{${latexExponentStr}}$`;
-	} else {
-		return `$${mantissa} \\times 10^{${latexExponentStr}}$`;
 	}
+	
+	return `$${mantissa} \\times 10^{${latexExponentStr}}$`;
 }
 
 $(document).ready(function() {
@@ -90,6 +90,15 @@ $(document).ready(function() {
 				var rowNode = this.node();
 
 				api.cells(rowNode, '').every(function(cellInfo) {
+					
+					                    // --- IMPORTANT DEBUGGING LOGS HERE ---
+                    console.log("--- Processing Cell ---");
+                    console.log("  Current Column Index (cellInfo.column):", cellInfo.column);
+                    console.log("  Defined latexColumnIndexes:", latexColumnIndexes);
+                    console.log("  Does latexColumnIndexes INCLUDE current column?", latexColumnIndexes.includes(cellInfo.column));
+                    console.log("  Original Data for this cell:", this.data());
+                    // --- END DEBUGGING LOGS ---
+					
 					if (latexColumnIndexes.includes(cellInfo.column)) {
 						var originalData = this.data();
 						var formattedData = numberToLaTeX(originalData);
