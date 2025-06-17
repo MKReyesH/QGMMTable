@@ -38,9 +38,11 @@ $(document).ready(function() {
 		"columnDefs": [
 			{
 				"targets": [2, 3, 4],
+				"type": "num",
 				"render": function (data, type, row, meta) {
-					console.log("Column:", meta.col, "Type:", typeof data, "Value:", data, "Render Type:", type);
-					if (type === 'display' && typeof data === 'number') {
+					let numericData = parseFloat(data);
+					
+					if (type === 'display' && !isNaN(numericData)) {
 						if (data === 0) {
 							return "0"; // Handle zero separately to avoid "0e+0"
 						}
