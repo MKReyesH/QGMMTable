@@ -1,3 +1,3 @@
 # Table
 
-{% include database.html %}
+{% include dynamictab.html %}

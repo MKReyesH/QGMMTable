@@ -13,15 +13,10 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
         
-        <!--LaTeX support-->
-        <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-        <script> MathJax = { tex: { inlineMath: [['$', '$']] } }; </script>
+        {% include mathjax.html %}
         
         {% if page.title == "Table" %}
-        <!--DataBase support-->
-        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-        <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" />
+            {% include datatables.html %}
         {% endif %}
         
     </head>
@@ -31,11 +26,7 @@
         <header class="page-header" role="banner">
             <h1 class="project-name">{{ page.title | default: site.title | default: site.github.repository_name }}</h1>
             <h2 class="project-tagline">{{ page.description | default: site.description | default: site.github.project_tagline }}</h2>
-            <!--Navigation bar-->
-            <a href="/QGMMTable" class="btn">Home</a>
-            <a href="/QGMMTable/pages/table" class="btn">Table</a>
-            <a href="/QGMMTable/pages/effects" class="btn">Effects</a>
-            <a href="/QGMMTable/pages/about" class="btn">About</a>
+            {% include navbar.html %}
         </header>
 
         <main id="content" class="main-content" role="main">
