@@ -1,4 +1,4 @@
 Messengers,		Effects,		$\delta^{(0)}$,		$E_\text{Pl}^{(1)}$,		$E_\text{Pl}^{(2)}$
-Gamma,			VPD,			2.23e-26,			1.00e-8,					1.00e+2
-Gamma,			Spl,			1.45,				1.20,						0.9
-Neutrino,		Spl,			-,					1.20,						0.0
+Gamma,			VPD,			2.23e-26,			1.6,						1.00e+2
+Gamma,			Spl,			1.45,				0.7,						0.9
+Neutrino,		Spl,			,					8,							0.0

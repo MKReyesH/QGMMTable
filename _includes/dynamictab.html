@@ -38,16 +38,9 @@ $(document).ready(function() {
 		const parts = expStr.split('e');
 		let mantissa = parts[0];
 		let exponent = parseInt(parts[1], 10);
+		let exponentSign = exponent >= 0 ? '+' : '';
 
-		let latexString;
-
-		if (exponent === 0) {
-			latexString = `$${mantissa}$`; 
-		} else {
-			latexString = `$${mantissa} \\times 10^{${exponent}}$`;
-        }
-
-		return latexString;
+		return `$${mantissa} \\times 10^{${exponentSign}${exponent}}$‘;
 	}
 
 	//Dynamic table rendering
