@@ -2,7 +2,7 @@
 title: About
 ---
 
-# Colaborators
+# Designers
 
 - [Maykoll A. Reyes](https://github.com/MKReyesH)
 
