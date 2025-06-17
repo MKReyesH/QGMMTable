@@ -89,6 +89,16 @@ $(document).ready(function() {
 					if (cellInfo.column >= firstNumColumn) {
 						var originalData = this.data();
 						var formattedData = numberToLaTeX(originalData);
+						
+						                        // --- IMPORTANT: ADD THESE CONSOLE LOGS ---
+                        console.log("Column Index:", cellInfo.column);
+                        console.log("Original Data from cell:", originalData, " (Type:", typeof originalData, ")");
+
+						var formattedData = numberToLaTeX(originalData); // Call your conversion function
+
+                        console.log("Formatted Data from numberToLaTeX:", formattedData, " (Type:", typeof formattedData, ")");
+                        // --- END CONSOLE LOGS ---
+						
 						$(this.node()).html(formattedData);
 					}
 				});
