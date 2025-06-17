@@ -3,4 +3,4 @@ layout: default
 title: About
 ---
 
-It is a me, Mario!
+Proof of concept by [Maykoll A. Reyes](https://github.com/MKReyesH)
