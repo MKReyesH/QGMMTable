@@ -3,6 +3,6 @@ layout: default
 title: Table
 ---
 
-This is the table
+# Table
 
 {% include database.html %}
