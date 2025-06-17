@@ -53,7 +53,18 @@ $(document).ready(function() {
 							maximumFractionDigits: 2  // Adjust precision as needed
 						}).format(data);
 
-						return formatted.replace('e+', ' x 10^').replace('e-', ' x 10^-');
+						const regex = /([+\-]?[\d.]+)[Ee]([+\-]?\d+)/;
+						const match = formatted.match(regex);
+						
+						if (match) {
+							const base = match[1];
+							const exponent = match[2];
+
+							const cleanExponent = exponent.startsWith('+') ? exponent.substring(1) : exponent;
+							return `${base} x 10^${cleanExponent}`;
+						} else {
+							return formatted; 
+						}
 
 					}
 
