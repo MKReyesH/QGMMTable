@@ -1,4 +1,4 @@
-Messengers, Effects, $\delta^{(0)}$, $E_\text{Pl}^{(1)}$, $E_\text{Pl}^{(2)}$
-Gamma, VPD, $10^{22}$, $10^{-8}$, $10^{2}$
-Gamma, Spl, $\sqrt{\pi}$, $2.34$, $\exp{-10}$
-Neutrino, Spl, $0$, $0.0$, $99$
+Messengers,		Effects,		$\delta^{(0)}$,		$E_\text{Pl}^{(1)}$,		$E_\text{Pl}^{(2)}$
+Gamma,			VPD,			$10^{22}$,			$10^{-8}$,					$10^{2}$
+Gamma,			Spl,			$\sqrt{\pi}$,		$2.34$,						$\exp(-10)$
+Neutrino,		Spl,			$0$,				$0.0$,						$99$
