@@ -39,6 +39,7 @@ $(document).ready(function() {
 			{
 				"targets": [2, 3, 4],
 				"render": function (data, type, row, meta) {
+					console.log("Column:", meta.col, "Type:", typeof data, "Value:", data, "Render Type:", type);
 					if (type === 'display' && typeof data === 'number') {
 						if (data === 0) {
 							return "0"; // Handle zero separately to avoid "0e+0"
