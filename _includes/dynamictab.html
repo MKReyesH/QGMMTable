@@ -71,9 +71,6 @@ $(document).ready(function() {
 	//Columns which filter button
 	var filterColumnIndexes = [0, 1];
 	
-	//Columns which LaTeX Numbers
-	var latexColumnIndexes = [2, 3, 4];
-	
 	//Number of rows entries per page
 	var rowsPerPage = 30;
 
@@ -88,21 +85,12 @@ $(document).ready(function() {
 
 			api.rows({ page: 'current' }).every(function() {
 				var rowNode = this.node();
-				
-				var rowApi = api.row(rowNode);
-				rowApi.cells().every(function(cellApi, cellIdx, colIdx) {
-					
-                   console.log("--- Processing Cell ---"); // Uncomment for full debugging logs
-                    console.log("  Current Column Index (colIdx):", colIdx);
-                    console.log("  Defined latexColumnIndexes:", latexColumnIndexes);
-                    console.log("  Does latexColumnIndexes INCLUDE current colIdx?", latexColumnIndexes.includes(colIdx));
-                    console.log("  Original Data for this cell:", this.data());					
-					if (latexColumnIndexes.includes(colIdx)) {
+
+				api.cells(rowNode, '').every(function(cellInfo) {
 						var originalData = this.data();
 						var formattedData = numberToLaTeX(originalData);
 						
 						$(this.node()).html(formattedData);
-					}
 				});
 			});
 			
