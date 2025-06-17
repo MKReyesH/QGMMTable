@@ -66,9 +66,17 @@ $(document).ready(function() {
 				"type": "num",
 				"render": function (data, type, row, meta) {
 					let numericData = parseFloat(data);
-					if (type === 'display' && !isNaN(numericData)) {
-						return formatScientific(numericData, 2);
+					
+					if (isNaN(numericData)) {
+						return data;
 					}
+					
+					if (type === 'display') {
+						return formatScientific(numericData, 2);
+					} else if (type === 'export') {
+						return numericData;
+					}
+					
                     return data;
 				}
 			}
