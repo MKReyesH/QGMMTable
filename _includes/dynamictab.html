@@ -59,7 +59,7 @@ function numberToLaTeX(value) {
         latexExponentStr = '-' + latexExponentStr;
     }
 
-    return `${mantissa} \times 10^{${latexExponentStr}}$`;
+    return `$${mantissa} \\times 10^{${latexExponentStr}}$`;
 }
 
 $(document).ready(function() {
