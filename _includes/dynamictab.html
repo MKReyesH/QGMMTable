@@ -3,7 +3,7 @@
 	<thead>
 		<tr>
 			{% for pair in site.data.database[0] %}
-				<th>{{ pair[0] }}</th>
+				<th>${{ pair[0] }}$</th>
 			{% endfor %}
 		</tr>
 	</thead>
@@ -61,7 +61,8 @@ $(document).ready(function() {
 						exportOptions: {
 							 orthogonal: 'export'
 						},
-						fieldBoundary: ''
+						fieldBoundary: '',
+						fieldSeparator: ', '
 					},
 					{
 						extend: 'excel',
