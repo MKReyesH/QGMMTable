@@ -59,11 +59,11 @@ function numberToLaTeX(value) {
         latexExponentStr = '-' + latexExponentStr;
     }
     
-    if (parseFloat(mantissa) === 1) {
+	if (parseFloat(mantissa) === 1) {
 		return `$10^{${latexExponentStr}}$`;
-	} 
-
-    return `$${mantissa} \\times 10^{${latexExponentStr}}$`;
+	} else {
+		return `$${mantissa} \\times 10^{${latexExponentStr}}$`;
+	}
 }
 
 $(document).ready(function() {
