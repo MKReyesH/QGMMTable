@@ -1,3 +1,5 @@
-# Table
+---
+title: Table
+---
 
 {% include dynamictab.html %}

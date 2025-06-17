@@ -1,3 +1,5 @@
-# QGMM Table webpage
+---
+title: QGMM Table webpage
+---
 
 Welcome to the QGMM Table webpage
