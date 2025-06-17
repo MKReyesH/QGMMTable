@@ -88,18 +88,16 @@ $(document).ready(function() {
 
 			api.rows({ page: 'current' }).every(function() {
 				var rowNode = this.node();
-
-				api.cells(rowNode, '').every(function(cellInfo) {
+				
+				var rowApi = api.row(rowNode);
+				rowApi.cells().every(function(cellApi, cellIdx, colIdx) {
 					
-					                    // --- IMPORTANT DEBUGGING LOGS HERE ---
-                    console.log("--- Processing Cell ---");
-                    console.log("  Current Column Index (cellInfo.column):", cellInfo.column);
+                   console.log("--- Processing Cell ---"); // Uncomment for full debugging logs
+                    console.log("  Current Column Index (colIdx):", colIdx);
                     console.log("  Defined latexColumnIndexes:", latexColumnIndexes);
-                    console.log("  Does latexColumnIndexes INCLUDE current column?", latexColumnIndexes.includes(cellInfo.column));
-                    console.log("  Original Data for this cell:", this.data());
-                    // --- END DEBUGGING LOGS ---
-					
-					if (latexColumnIndexes.includes(cellInfo.column)) {
+                    console.log("  Does latexColumnIndexes INCLUDE current colIdx?", latexColumnIndexes.includes(colIdx));
+                    console.log("  Original Data for this cell:", this.data());					
+					if (latexColumnIndexes.includes(colIdx)) {
 						var originalData = this.data();
 						var formattedData = numberToLaTeX(originalData);
 						
