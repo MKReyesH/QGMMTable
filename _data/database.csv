@@ -1,4 +1,4 @@
-Messengers, Effects, Luminality, $\delta^{(0)}$, $E_\text{LIV}^{(1)}\text{ [eV]}$, $E_\text{LIV}^{(2)}\text{ [eV]}$
-Gamma, VPD, +, 2.23e-26, 1.6, 1.00e+2
-Gamma, Spl, -, 1.45, 0.7, 0.9
-Neutrino, Spl, +, N/A, 8, 0.0
+Messengers, Luminality, Effects, $\delta^{(0)}$, $E_\text{LIV}^{(1)}\text{ [eV]}$, $E_\text{LIV}^{(2)}\text{ [eV]}$
+Gamma, +, VPD, 2.23e-26, 1.6, 1.00e+2
+Gamma, -, Spl, 1.45, 0.7, 0.9
+Neutrino, +, Spl, N/A, 8, 0.0
