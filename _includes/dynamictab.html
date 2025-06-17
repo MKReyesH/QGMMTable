@@ -20,10 +20,55 @@
 
 <!--Dynamic table using js-->
 <script>
+function numberToLaTeX(value) {
+
+	let num = parseFloat(value);
+
+	// If not a number, do nothing
+    if (isNaN(num) || value === null || value.trim() === "") {
+        return value;
+    }
+
+	// If zero, return zero
+    if (num === 0) {
+        return "$0$";
+    }
+
+    // Convert the number to a scientific notation
+    let scientificString = num.toExponential(2);
+
+    // Regex to extract mantissa, exponent sign, and exponent value.
+    let parts = scientificString.match(/^(-?\d+\.?\d*)[eE]([+-]?)(\d+)$/);
+    
+    // If fails, return value
+    if (!parts) {
+    	return value;
+    }
+
+    let mantissa = parts[1];
+	let sign = parts[2];
+	let exponent = parseInt(parts[3], 10);
+
+    // If the exponet is zero, return just the mantisa
+    if (exponent === 0) {
+        return `$${mantissa}$`;
+    }
+
+    let latexExponentStr = exponent.toString();
+    if (sign === '-') {
+        latexExponentStr = '-' + latexExponentStr;
+    }
+
+    return `${mantissa} \times 10^{${latexExponentStr}}$`;
+}
+
 $(document).ready(function() {
 
 	//Columns which filter button
 	var filterColumnIndexes = [0, 1];
+	
+	//First numeric column
+	var firstNumColumn = 2;
 	
 	//Number of rows entries per page
 	var rowsPerPage = 30;
@@ -33,6 +78,22 @@ $(document).ready(function() {
 		
 		"lengthChange": false,
 		"pageLength": rowsPerPage,
+		
+		"drawCallback": function(settings) {
+			var api = this.api();
+
+			api.rows({ page: 'current' }).every(function() {
+				var rowNode = this.node();
+
+				api.cells(rowNode, '').every(function(cellInfo) {
+					if (cellInfo.column >= firstNumColumn) {
+						var originalData = this.data();
+						var formattedData = numberToLaTeX(originalData, cellInfo.column);
+						$(this.node()).html(formattedData);
+					}
+				});
+			});
+		},
 
 		initComplete: function () {
 		
