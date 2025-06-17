@@ -93,6 +93,13 @@ $(document).ready(function() {
 					}
 				});
 			});
+			
+			if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+				MathJax.typesetPromise([this.table().node()]).catch(function(err) {
+					console.error("MathJax typesetting error:", err);
+				});
+			} 
+			
 		},
 
 		initComplete: function () {
