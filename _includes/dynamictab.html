@@ -55,7 +55,14 @@ $(document).ready(function() {
 		
 		layout: {
 			topStart: {
-				buttons: ['copy', 'csv', 'excel', 'pdf']
+				buttons: [
+					{
+						extend: 'copy',
+						exportOptions: {
+							 orthogonal: 'export'
+						}
+					}
+				]
 			}
 		},
 		
