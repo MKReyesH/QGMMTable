@@ -58,6 +58,10 @@ function numberToLaTeX(value) {
     if (sign === '-') {
         latexExponentStr = '-' + latexExponentStr;
     }
+    
+    if (parseFloat(mantissa) === 1) {
+		return `$10^{${latexExponentStr}}$`;
+	} 
 
     return `$${mantissa} \\times 10^{${latexExponentStr}}$`;
 }
@@ -66,6 +70,9 @@ $(document).ready(function() {
 
 	//Columns which filter button
 	var filterColumnIndexes = [0, 1];
+	
+	//Columns which LaTeX Numbers
+	var latexColumnIndexes = [2, 3, 4];
 	
 	//Number of rows entries per page
 	var rowsPerPage = 30;
@@ -83,14 +90,20 @@ $(document).ready(function() {
 				var rowNode = this.node();
 
 				api.cells(rowNode, '').every(function(cellInfo) {
-					var originalData = this.data();
-					var formattedData = numberToLaTeX(originalData);
+					if (latexColumnIndexes.includes(cellInfo.column)) {
+						var originalData = this.data();
+						var formattedData = numberToLaTeX(originalData);
 						
-					$(this.node()).html(formattedData);
+						$(this.node()).html(formattedData);
+					}
 				});
 			});
 			
-
+			if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+				MathJax.typesetPromise([api.table().node()]).catch(function(err) {
+					console.error("MathJax typesetting error:", err);
+				});
+			} 
 			
 		},
 
