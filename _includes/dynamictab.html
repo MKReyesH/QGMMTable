@@ -5,9 +5,9 @@
 
 <table id="datatable" class="display">
 	<thead>
-	{% assign headers = site.data.database.first | keys %}
+	{% assign headersArray = site.data.database[0] %}
 		<tr>
-		{% for header in headers %}
+		{% for header in headersArray %}
 			<th>{{ header }}</th>
 		{% endfor %}
 		</tr>
