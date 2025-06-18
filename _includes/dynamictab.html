@@ -1,33 +1,18 @@
 <!--Static table from csv file-->
-
-{% assign numericColumnIndices = "3,4,5" | split: "," %}
-{% assign inspireColumnIndices = "6" | split: "," %}
-
 <table id="datatable" class="display">
 	<thead>
 		<tr>
-		{% for pair in site.data.database[0] %}
-			<th>{{ pair[0] }}</th>
-		{% endfor %}
+			{% for pair in site.data.database[0] %}
+				<th>{{ pair[0] }}</th>
+			{% endfor %}
 		</tr>
 	</thead>
 	<tbody>
 	{% for row in site.data.database %}
 		<tr>
-		{% for pair in row %}
-			{% assign colIdx = forloop.index0 %}
-			{% assign cellClass = "string" %}
-			
-			{% if numericColumnIndices contains colIdx %}
-				{% assign cellClass = "number" %}
-			{% endif %}
-			
-			{% if inspireColumnIndices contains colIdx %}
-				{% assign cellClass = "inspire" %}
-			{% endif %}
-			
-			<td class="{{ cellClass }}">{{ pair[1] }}</td>
-		{% endfor %}
+			{% for pair in row %}
+				<td>{{ pair[1] }}</td>
+			{% endfor %}
 		</tr>
 	{% endfor %}
 	</tbody>
@@ -95,43 +80,26 @@ $(document).ready(function() {
 			}
 		},
 		
-	// Use the 'createdCell' callback for dynamic class-based rendering
-		"createdCell": function (td, cellData, rowData, row, col) {
-			// Check if the cell being created has the 'number' class
-			if ($(td).hasClass('number')) {
-				// Apply numeric type for sorting to this specific column
-				// This ensures columns with 'number' class sort numerically
-				// It's more robust to set this in a single columnDef, but this is for dynamic targeting
-				this.api().column(col).type('num');
-
-				// Apply the scientific formatting to the display data
-				let numericData = parseFloat(cellData);
-				if (!isNaN(numericData)) {
-					// Directly update the innerHTML of the cell for display type
-					// This happens AFTER DataTables has processed its internal 'data'
-					$(td).html(formatScientific(numericData, 2));
-				}
-			}
-		},
-		
 		"columnDefs": [
 			{
-				// This columnDef is mainly for 'export' type and ensuring a default for all cells
-				// The actual 'display' rendering for 'number' class is handled by createdCell
-				"targets": '_all', 
+				//Set columns which are numbers
+				"targets": numberColumnIndexes,
+				"type": "num",
 				"render": function (data, type, row, meta) {
-					// This part handles the 'export' type for *all* columns,
-					// and ensures original data is returned for other types if not modified by createdCell
-					if (type === 'export') {
-						// For export, return the raw numeric data if it's a number cell
-						// This might still require some refinement if you have complex data types
-						var cellNode = this.api().cell(meta.row, meta.col).node();
-						if ($(cellNode).hasClass('number')) {
-							return parseFloat(data); // Return raw number for export
-						}
-						return data; // For non-number cells, return original data
+					console.log("Render called. Type:", type, "Data:", data);
+					let numericData = parseFloat(data);
+					
+					if (isNaN(numericData)) {
+						return data;
 					}
-					return data; // Return original data for 'display' type, as createdCell will format it
+					
+					if (type === 'display') {
+						return formatScientific(numericData, 2);
+					} else if (type === 'export') {
+						return numericData;
+					}
+					
+                    return data;
 				}
 			}
 		],
