@@ -356,6 +356,13 @@ $(document).ready(function() {
 							// Simply redraw the table. The render function for affected cells will be re-evaluated.
 							console.log(`Unit dropdown for column ${colIdx} changed to: ${$(this).val()}`);
 							api.draw(); // CORRECTED LINE
+							console.log(`DEBUG: api.draw() for column ${colIdx} has been called.`); // ADD THIS NEW LINE
+							
+							            // Double check that MathJax is ready and triggered for redraws, although drawCallback should handle it
+            if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
+                MathJax.typesetPromise(); // Manually trigger MathJax update here as well, just in case
+                console.log('DEBUG: MathJax.typesetPromise() explicitly called after draw.');
+            }
 						});
 
 					var units = unitConversions[colIdx].units;
