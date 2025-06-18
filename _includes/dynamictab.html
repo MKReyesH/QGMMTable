@@ -202,7 +202,9 @@ $(document).ready(function() {
 									//	}
 									//});
 									
-									dt.draw();
+									setTimeout(function() {
+										dt.draw();
+									}, 50);
 									
 								},
 								error: function(jqXHR, textStatus, errorThrown) {
