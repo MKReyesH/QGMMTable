@@ -32,7 +32,6 @@
 </style>
 <script>
 var myDataTable;
-var linkedRecids = new Set();
 var unitConversions = {
     3: { 
         default: 'Dimensionless',
@@ -150,8 +149,6 @@ $(document).ready(function() {
 								return;
 							}
 							
-							linkedRecids = new Set(recids);
-							
 							var queryString = recids.map(recid => `recid:${recid}`).join(' OR ');
 							var encodedQueryString = encodeURIComponent(queryString);
 							
@@ -193,7 +190,17 @@ $(document).ready(function() {
 									
 									$('#inspireApiContent').html(processedHtml);
 									
-									dt.rows().invalidate('data').draw();
+									dt.rows({ search: 'applied' }).every(function () {
+										var rowNode = this.node();
+										var rowData = this.data();
+										var currentRecid = rowData[inspireColIdx];
+										var cell = $(rowNode).find('td').eq(inspireColIdx); 
+										if (currentRecid && $('#bib-recid-' + currentRecid).length) {
+											cell.html(`<a href="#bib-recid-${currentRecid}">${currentRecid}</a>`);
+										} else {
+											cell.html(currentRecid);
+										}
+									})
 									
 								},
 								error: function(jqXHR, textStatus, errorThrown) {
@@ -271,9 +278,6 @@ $(document).ready(function() {
 			{
 				"targets": inspireColumnIndexes,
 				"render": function(data, type, row, meta) {
-					if (linkedRecids.has(data)) {
-						return `<a href="#bib-recid-${data}">${data}</a>`;
-					}
 					 return data;
 				}
 			}
