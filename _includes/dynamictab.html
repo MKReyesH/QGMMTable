@@ -281,11 +281,11 @@ $(document).ready(function() {
 							}
 							
 							column.invalidate('data').draw(); 
-							
-							unitsForColumn.forEach(unit => {
-								select.append(`<option value="${unit.value}" ${unit.value === currentColumnUnits[colIdx].value ? 'selected' : ''}>${unit.label}</option>`);
-							});
-							
+														
+						});
+					
+						unitsForColumn.forEach(unit => {
+							select.append(`<option value="${unit.value}" ${unit.value === currentColumnUnits[colIdx].value ? 'selected' : ''}>${unit.label}</option>`);
 						});
 					
 				} else {
