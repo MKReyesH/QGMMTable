@@ -22,10 +22,13 @@
 <script>
 $(document).ready(function() {
 
-	//Columns which LaTeX number rendering
+	//Columns with LaTeX number rendering
 	var numberColumnIndexes = [3, 4, 5];
+	
+	//Columns with inspire rendering
+	var inspireColumnIndexes = [6];
 
-	//Columns which filter button
+	//Columns with filter button
 	var filterColumnIndexes = [0, 1, 2];
 	
 	//Number of rows entries per page
@@ -82,11 +85,10 @@ $(document).ready(function() {
 		
 		"columnDefs": [
 			{
-				//Set columns which are numbers
+				//Rendering for number columns
 				"targets": numberColumnIndexes,
 				"type": "num",
 				"render": function (data, type, row, meta) {
-					console.log("Render called. Type:", type, "Data:", data);
 					let numericData = parseFloat(data);
 					
 					if (isNaN(numericData)) {
@@ -97,6 +99,18 @@ $(document).ready(function() {
 						return formatScientific(numericData, 2);
 					} else if (type === 'export') {
 						return numericData;
+					}
+					
+                    return data;
+				}
+			},
+			{
+				//Rendering for inspire columns
+				"targets": inspireColumnIndexes,
+				"render": function (data, type, row, meta) {
+					
+					if (type === 'display') {
+						return '<a href="' + https://inspirehep.net/literature/ + data '">' + data + '</a>';
 					}
 					
                     return data;
