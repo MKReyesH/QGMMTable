@@ -281,7 +281,8 @@ $(document).ready(function() {
 					
 					 if (type === 'display') {
 					 	
-					 	const globalSearchTerm = myDataTable.search();
+					 	const api = meta.settings.oInstance.api();
+					 	const globalSearchTerm = api.search();
 					 	
 					 	if (globalSearchTerm) {
 					 		
