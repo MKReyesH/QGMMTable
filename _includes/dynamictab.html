@@ -56,6 +56,21 @@ $(document).ready(function() {
 		"pageLength": rowsPerPage,
 		"searching": true,
 		
+		    columnControl: [
+        {
+            target: 0,
+            content: ['order']
+        },
+        {
+            target: 1,
+            content: ['search']
+        }
+    ],
+    ordering: {
+        indicators: false,
+        handler: false
+    }
+		
 		layout: {
 			topStart: {
 				buttons: [
@@ -84,8 +99,8 @@ $(document).ready(function() {
 		},
 		
 		"columnDefs": [
+			//Rendering for number columns
 			{
-				//Rendering for number columns
 				"targets": numberColumnIndexes,
 				"type": "num",
 				"render": function (data, type, row, meta) {
@@ -104,8 +119,8 @@ $(document).ready(function() {
                     return data;
 				}
 			},
+			//Rendering for inspire columns
 			{
-				//Rendering for inspire columns
 				"targets": inspireColumnIndexes,
 				"render": function (data, type, row, meta) {
 					
