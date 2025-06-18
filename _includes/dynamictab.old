@@ -108,52 +108,12 @@ $(document).ready(function() {
 								url: inspireApiUrl,
 								method: 'GET',
 								success: function(responseHtml) {
-									var tempDiv = $('<div>').html(responseHtml);
-									var processedHtml = '';
-									var currentEntryDiv = null;
+
+									$('#inspireApiContent').html(responseHtml);
 									
-									tempDiv.contents().each(function(index, element) {
-										var $element = $(element);
-										if ($element.is('p') && $element.find('b a[href*="inspirehep.net/literature/"]').length) {
-											
-											if (currentEntryDiv) {
-												processedHtml += currentEntryDiv.prop('outerHTML');
-											}
-											
-											var href = $element.find('a').attr('href');
-											var match = href.match(/literature\/(\d+)$/);
-											var recid = match ? match[1] : 'unknown';
-											
-											currentEntryDiv = $('<div>').attr('id', 'bib-recid-' + recid);
-											currentEntryDiv.append($element.clone());
-											
-										} else if (currentEntryDiv) {
-											
-											currentEntryDiv.append($element.clone());
-											
-										}
-									});
-									
-									if (currentEntryDiv) {
-										processedHtml += currentEntryDiv.prop('outerHTML');
-									}
-									
-									$('#inspireApiContent').html(processedHtml);
-									
-									var api = $('#datatable').DataTable();
-									var inspireColIdx = inspireColumnIndexes[0];
-									
-									api.rows({ search: 'applied' }).every(function () {
-										var rowNode = this.node();
-										var rowData = this.data();
-										var cell = $(rowNode).find('td').eq(inspireColIdx); 
-										if (recid && $('#bib-recid-' + recid).length) {
-											cell.html(`<a href="#bib-recid-${recid}">${recid}</a>`);
-										} else {
-											cell.html(recid);
-										}
-									});
-									
+									//if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
+									//	MathJax.typesetPromise();
+									//}
 								},
 								error: function(jqXHR, textStatus, errorThrown) {
 									console.error('Error fetching Inspire API content:', textStatus, errorThrown, jqXHR);
@@ -191,6 +151,13 @@ $(document).ready(function() {
 			{	//Rendering for inspire columns
 				"targets": inspireColumnIndexes,
 				"render": function (data, type, row, meta) {
+					
+					if (type === 'display') {
+						const encodedData = encodeURIComponent(data);
+						const inspireUrl = `https://inspirehep.net/literature/${encodedData}`;
+						return `<a href="${inspireUrl}" target="_blank">${data}</a>`;
+					}
+					
                     return data;
 				}
 			}
