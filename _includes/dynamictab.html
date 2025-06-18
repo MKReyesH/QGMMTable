@@ -46,19 +46,21 @@ $(document).ready(function() {
 	var rowsPerPage = 30;
 
 	// --- NEW: Unit Definitions and Conversion Factors ---
+    // IMPORTANT: Assume 'factor: 1' corresponds to the unit your data comes in from site.data.database
+    // All other factors convert FROM this base unit TO the target unit.
 	var unitConversions = {
-		// Example: Column 3 might be 'Length' (assuming original data is in meters)
+		// Example: Column 3 might be 'Length' (assuming original data from CSV is in meters)
 		3: { // Column index 3
-			default: 'm', // Default unit for display
+			default: 'm', // Default unit for display (should ideally be the base unit of your data)
 			units: {
-				'm': { display: 'm', factor: 1 },
-				'cm': { display: 'cm', factor: 100 },
-				'mm': { display: 'mm', factor: 1000 },
-				'km': { display: 'km', factor: 0.001 },
-				'in': { display: 'in', factor: 39.3701 } // 1 meter = 39.3701 inches
+				'm': { display: 'm', factor: 1 },         // 1 meter * 1 = 1 meter
+				'cm': { display: 'cm', factor: 100 },     // 1 meter * 100 = 100 cm
+				'mm': { display: 'mm', factor: 1000 },    // 1 meter * 1000 = 1000 mm
+				'km': { display: 'km', factor: 0.001 },   // 1 meter * 0.001 = 0.001 km
+				'in': { display: 'in', factor: 39.3701 }  // 1 meter * 39.3701 = 39.3701 inches
 			}
 		},
-		// Example: Column 4 might be 'Mass' (assuming original data is in kilograms)
+		// Example: Column 4 might be 'Mass' (assuming original data from CSV is in kilograms)
 		4: { // Column index 4
 			default: 'kg',
 			units: {
@@ -67,7 +69,7 @@ $(document).ready(function() {
 				'lb': { display: 'lb', factor: 2.20462 } // 1 kg = 2.20462 pounds
 			}
 		},
-		// Example: Column 5 might be 'Time' (assuming original data is in seconds)
+		// Example: Column 5 might be 'Time' (assuming original data from CSV is in seconds)
 		5: { // Column index 5
 			default: 's',
 			units: {
@@ -101,10 +103,22 @@ $(document).ready(function() {
 			return `$0 ${unit}$`;
 		}
 
-		// If the number is between 0.001 and 10000 (inclusive), display as fixed decimal, otherwise use scientific
-		if (Math.abs(num) >= 0.001 && Math.abs(num) < 10000) {
-			return `$${num.toFixed(precision)} ${unit}$`;
-		}
+        // Adjust precision for very small numbers to avoid excessive zeros
+        let actualPrecision = precision;
+        if (Math.abs(num) > 0 && Math.abs(num) < 0.001) { // Numbers smaller than 0.001
+            // Use scientific notation, `precision` will apply to mantissa
+        } else if (Math.abs(num) >= 0.001 && Math.abs(num) < 10000) {
+            // Display as fixed decimal for numbers between 0.001 and 10000
+            // Find appropriate precision to avoid trailing zeros but show enough detail
+            if (num % 1 === 0) { // If it's an integer
+                actualPrecision = 0;
+            } else {
+                actualPrecision = Math.max(precision, Math.min(6, num.toString().split('.')[1] ? num.toString().split('.')[1].length : 0));
+                // Cap at 6 decimal places for display, or original precision, or actual decimal length
+            }
+            return `$${num.toFixed(actualPrecision).replace(/\.0+$/, '')} ${unit}$`; // Remove trailing .00
+        }
+
 
 		// Fallback to scientific notation for very large or very small numbers
 		const expStr = num.toExponential(precision);
@@ -252,24 +266,20 @@ $(document).ready(function() {
 					// Apply Unit Conversion for Display and handle export/sort
 					const colIdx = meta.col;
 					if (numberColumnIndexes.includes(colIdx) && unitConversions[colIdx]) {
-						const defaultUnitKey = unitConversions[colIdx].default;
-						const defaultUnitInfo = unitConversions[colIdx].units[defaultUnitKey];
-
+						// For display, get the currently selected unit and apply its factor
 						if (type === 'display') {
 							const currentUnitKey = getCurrentUnit(colIdx);
 							const unitInfo = unitConversions[colIdx].units[currentUnitKey];
-							// Convert original data to base unit, then from base unit to target unit
-							const convertedValue = (numericData / defaultUnitInfo.factor) * unitInfo.factor;
+                            // Assuming 'numericData' (from your CSV) is already in the 'base unit' (factor: 1)
+                            // If your CSV data is in 'default' unit and its factor is not 1,
+                            // you'd first convert to the implicit base unit (value / default_factor),
+                            // then convert to target unit ( * target_factor).
+                            // But typically, you set the CSV's implicit unit to be the 'factor: 1' unit.
+							const convertedValue = numericData * unitInfo.factor;
 							return displayLatexNumber(convertedValue, 2, unitInfo.display);
 						} else if (type === 'export' || type === 'sort') {
-							 // Always export/sort the original base unit value to ensure consistency
-                             // Assuming `data` passed here is the original value from your `site.data.database`.
-                             // If `data` is already in a consistent base unit, you can just return it.
-                             // If `data` comes in various units, you need to first convert it to your defined base unit.
-                             // For simplicity here, we assume `data` is already in the default unit.
-							 const baseValue = numericData; // If data from CSV is already in default unit (e.g. meters, kg, s)
-							 // If data from CSV is in an unknown unit, you'd need a lookup or an extra column to know its initial unit.
-							 return baseValue.toExponential(2); // Export in scientific notation for consistency in exports
+							 // Always export/sort the original numeric data in its base unit from CSV
+							 return numericData.toExponential(2); // Provide scientific notation for export/sort
 						}
 					}
 
@@ -288,6 +298,8 @@ $(document).ready(function() {
 		// To update LaTeX number rendering
 		"drawCallback": function( settings ) {
 			if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
+				// Only typeset if there are new math elements or potentially changed ones.
+				// DataTables redraws entire cells, so MathJax needs to re-process those.
 				MathJax.typesetPromise();
 			}
 		},
@@ -335,10 +347,13 @@ $(document).ready(function() {
 					var units = unitConversions[colIdx].units;
 					var defaultUnit = unitConversions[colIdx].default;
 
+					// Populate dropdown with units for this column
 					for (const unitKey in units) {
-						unitSelect.append(
-							`<option value="${unitKey}" ${unitKey === defaultUnit ? 'selected' : ''}>${units[unitKey].display}</option>`
-						);
+						if (units.hasOwnProperty(unitKey)) { // Best practice to check property
+							unitSelect.append(
+								`<option value="${unitKey}" ${unitKey === defaultUnit ? 'selected' : ''}>${units[unitKey].display}</option>`
+							);
+						}
 					}
 					// --- END NEW ---
 				} else {
