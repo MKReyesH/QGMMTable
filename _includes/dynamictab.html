@@ -278,7 +278,28 @@ $(document).ready(function() {
 			{
 				"targets": inspireColumnIndexes,
 				"render": function(data, type, row, meta) {
-					return data;
+					
+					 if (type === 'display') {
+					 	
+					 	const globalSearchTerm = myDataTable.search();
+					 	
+					 	if (globalSearchTerm) {
+					 		
+					 		return data;
+					 		
+					 	} else {
+					 		
+					 		var currentRecid = row[inspireColumnIndexes[0]];
+					 		if (currentRecid && $(`#bib-recid-${currentRecid}`).length) {
+					 			return `<a href="#bib-recid-${currentRecid}">${currentRecid}</a>`;
+					 		}
+					 		
+					 		return data;
+					 	}
+					 	
+					 }
+					 
+					 return data;
 				}
 			}
 		],
