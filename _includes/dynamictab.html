@@ -31,104 +31,82 @@
 }
 </style>
 <script>
-var myDataTable; 
+var myDataTable;
+var unitConversions = {
+    3: { 
+        default: 'Dimensionless',
+        units: {
+            'Dimensionless': { display: 'Dimensionless', factor: 1 }
+        }
+    },
+    4: { 
+        default: 'Plank units', 
+        units: {
+            'Plank units': { display: 'Plank units', factor: 1 },
+            'eV': { display: 'eV', factor: 1.22e28 },
+            'GeV': { display: 'GeV', factor: 1.22e19 }
+        }
+    },
+    5: { 
+        default: 'Plank units', 
+        units: {
+            'Plank units': { display: 'Plank units', factor: 1 },
+            'eV': { display: 'eV', factor: 1.22e28 },
+            'GeV': { display: 'GeV', factor: 1.22e19 }
+        }
+    },
+};
+
+function getCurrentUnit(colIdx) {
+	var $selectElement = $(`#unit-select-${colIdx}`);
+	if ($selectElement.length) {
+		return $selectElement.val();
+	}
+    return unitConversions[colIdx] ? unitConversions[colIdx].default : '';
+}
+
+function displayLatexNumber(num, precision = 2) {
+
+	if (isNaN(num) || num === null || num === undefined) {
+		return '';
+	}
+	if (num === 0) {
+		return `$0$`;
+	}
+
+	const expStr = num.toExponential(precision); 
+	const parts = expStr.split('e');
+	let mantissa = parts[0];
+	let exponent = parseInt(parts[1], 10);
+		
+	if (exponent === 0) {
+		return `$${mantissa}$`;
+	}
+		
+	return `$${mantissa} \\times 10^{${exponent}}$`;
+}
 
 $(document).ready(function() {
 
 	//Columns with LaTeX number rendering
 	var numberColumnIndexes = [3, 4, 5];
-
+	
 	//Columns with inspire ids
 	var inspireColumnIndexes = [6];
 
-	//Columns with filter button (textual filters)
+	//Columns with filter button
 	var filterColumnIndexes = [0, 1, 2];
-
+	
 	//Number of rows entries per page
 	var rowsPerPage = 30;
 
-	// --- NEW: Unit Definitions and Conversion Factors ---
-    // IMPORTANT: Assume 'factor: 1' corresponds to the unit your data comes in from site.data.database
-    // All other factors convert FROM this base unit TO the target unit.
-	var unitConversions = {
-		// Example: Column 3 might be 'Length' (assuming original data from CSV is in meters)
-		3: { // Column index 3
-			default: 'm', // Default unit for display (should ideally be the base unit of your data)
-			units: {
-				'm': { display: 'm', factor: 1 },
-				'cm': { display: 'cm', factor: 100 },
-				'mm': { display: 'mm', factor: 1000 },
-				'km': { display: 'km', factor: 0.001 },
-				'in': { display: 'in', factor: 39.3701 }
-			}
-		},
-		// Example: Column 4 might be 'Mass' (assuming original data from CSV is in kilograms)
-		4: { // Column index 4
-			default: 'kg',
-			units: {
-				'kg': { display: 'kg', factor: 1 },
-				'g': { display: 'g', factor: 1000 },
-				'lb': { display: 'lb', factor: 2.20462 }
-			}
-		},
-		// Example: Column 5 might be 'Time' (assuming original data from CSV is in seconds)
-		5: { // Column index 5
-			default: 's',
-			units: {
-				's': { display: 's', factor: 1 },
-				'ms': { display: 'ms', factor: 1000 },
-				'min': { display: 'min', factor: 1/60 },
-				'hr': { display: 'hr', factor: 1/3600 }
-			}
-		}
-	};
-
-	// --- Function to get the current unit for a column ---
-	function getCurrentUnit(colIdx) {
-		var $selectElement = $(`#unit-select-${colIdx}`);
-		if ($selectElement.length) {
-			return $selectElement.val();
-		}
-		return unitConversions[colIdx] ? unitConversions[colIdx].default : '';
-	}
-
-	// Display numbers as LaTeX
-	function displayLatexNumber(num, precision = 2, unit = '') {
-		if (isNaN(num) || num === null || num === undefined) {
-			return '';
-		}
-
-		if (num === 0) {
-			return `$0 ${unit}$`;
-		}
-
-        let actualPrecision = precision;
-        if (Math.abs(num) > 0 && Math.abs(num) < 0.001) {
-        } else if (Math.abs(num) >= 0.001 && Math.abs(num) < 10000) {
-            if (num % 1 === 0) {
-                actualPrecision = 0;
-            } else {
-                actualPrecision = Math.max(precision, Math.min(6, num.toString().split('.')[1] ? num.toString().split('.')[1].length : 0));
-            }
-            return `$${num.toFixed(actualPrecision).replace(/\.0+$/, '')} ${unit}$`;
-        }
-
-		const expStr = num.toExponential(precision);
-		const parts = expStr.split('e');
-		let mantissa = parts[0];
-		let exponent = parseInt(parts[1], 10);
-
-		return `$${mantissa} \\times 10^{${exponent}} ${unit}$`;
-	}
-
 	//Dynamic table rendering
-	// ****** ASSIGN TO THE GLOBALLY DECLARED myDataTable ******
 	myDataTable = $('#datatable').DataTable({
-
+		
 		"lengthChange": false,
 		"pageLength": rowsPerPage,
 		"searching": true,
-
+		
 		layout: {
 			topStart: 'search',
 			topEnd: {
@@ -151,31 +129,29 @@ $(document).ready(function() {
 						extend: 'pdf',
 						exportOptions: {
 							 orthogonal: 'export'
-						},
+						}
 					},
 					{
 						text: 'Generate bibliography',
 						action: function ( e, dt, button, config ) {
 							var recids = [];
 							var inspireColIdx = inspireColumnIndexes[0];
-
+							
 							dt.rows({ search: 'applied' }).every(function () {
 								var data = this.data();
-								if (data[inspireColIdx]) {
-								    recids.push(data[inspireColIdx]);
-								}
+								recids.push(data[inspireColIdx]);
 							});
-
+							
 							if (recids.length === 0) {
 								alert('No filtered rows to generate an Inspire API URL.');
 								return;
 							}
-
+							
 							var queryString = recids.map(recid => `recid:${recid}`).join(' OR ');
 							var encodedQueryString = encodeURIComponent(queryString);
-
+							
 							var inspireApiUrl = `https://inspirehep.net/api/literature/?q=${encodedQueryString}&format=cv`;
-
+							
 							$.ajax({
 								url: inspireApiUrl,
 								method: 'GET',
@@ -183,42 +159,47 @@ $(document).ready(function() {
 									var tempDiv = $('<div>').html(responseHtml);
 									var processedHtml = '';
 									var currentEntryDiv = null;
-
+									
 									tempDiv.contents().each(function(index, element) {
 										var $element = $(element);
 										if ($element.is('p') && $element.find('b a[href*="inspirehep.net/literature/"]').length) {
+											
 											if (currentEntryDiv) {
 												processedHtml += currentEntryDiv.prop('outerHTML');
 											}
+											
 											var href = $element.find('a').attr('href');
-											var match = href ? href.match(/literature\/(\d+)$/) : null;
+											var match = href ? href.match(/literature\/(\d+)$/) : null;;
 											var recid = (match && match[1]) ? match[1] : 'unknown';
-
+											
 											currentEntryDiv = $('<div>').attr('id', 'bib-recid-' + recid);
 											currentEntryDiv.append($element.clone());
+											
 										} else if (currentEntryDiv) {
+											
 											currentEntryDiv.append($element.clone());
+											
 										}
 									});
-
+									
 									if (currentEntryDiv) {
 										processedHtml += currentEntryDiv.prop('outerHTML');
 									}
-
+									
 									$('#inspireApiContent').html(processedHtml);
-
+									
 									dt.rows({ search: 'applied' }).every(function () {
 										var rowNode = this.node();
 										var rowData = this.data();
 										var currentRecid = rowData[inspireColIdx];
-										var cell = $(rowNode).find('td').eq(inspireColIdx);
+										var cell = $(rowNode).find('td').eq(inspireColIdx); 
 										if (currentRecid && $('#bib-recid-' + currentRecid).length) {
 											cell.html(`<a href="#bib-recid-${currentRecid}">${currentRecid}</a>`);
 										} else {
 											cell.html(currentRecid);
 										}
 									});
-
+									
 								},
 								error: function(jqXHR, textStatus, errorThrown) {
 									console.error('Error fetching Inspire API content:', textStatus, errorThrown, jqXHR);
@@ -232,71 +213,77 @@ $(document).ready(function() {
 			bottomStart: 'info',
 			bottomEnd: 'paging'
 		},
-
+		
 		"columnDefs": [
 			{	//Rendering for number columns
 				"targets": numberColumnIndexes,
-				"type": "num", // Essential for correct numeric sorting
+				"type": "num",
 				"render": function (data, type, row, meta) {
-                    // console.log(`RENDER TEST HIT for col: ${meta.col}, type: ${type}. Data: ${data}`); // Keep for debugging if needed
-
 					let numericData = parseFloat(data);
-
-					// If data is not a valid number, return it as is for all types.
+					
 					if (isNaN(numericData) || numericData === null || numericData === undefined) {
 						return data;
 					}
-
+					
 					const colIdx = meta.col;
-
-					// --- Handle different render 'type's ---
+					
 					if (type === 'display') {
-						// This block is for what the user *sees* in the table (HTML/MathJax)
+						
 						if (numberColumnIndexes.includes(colIdx) && unitConversions[colIdx]) {
 							const currentUnitKey = getCurrentUnit(colIdx);
 							const unitDefinitions = unitConversions[colIdx].units;
 							const unitInfo = unitDefinitions[currentUnitKey];
-
+							
 							if (unitInfo && typeof unitInfo.factor === 'number') {
 								const convertedValue = numericData * unitInfo.factor;
-								return displayLatexNumber(convertedValue, 2, unitInfo.display);
+								return displayLatexNumber(convertedValue, 2);
 							} else {
-								// Fallback for display if unit info is missing/invalid
 								console.warn(`Unit conversion failed for column ${colIdx}, unit ${currentUnitKey}. Displaying raw formatted number.`);
-								return displayLatexNumber(numericData, 2, '');
+								return displayLatexNumber(numericData, 2);
 							}
 						}
-						// If it's a number column but no specific unit conversion defined, just display it formatted
+						
 						return displayLatexNumber(numericData, 2);
-
+						
 					} else if (type === 'sort' || type === 'type') {
-						// For sorting and internal DataTables type detection,
-						// always return the raw numeric value. This is CRUCIAL for numeric sorting.
+						
 						return numericData;
-
+						
 					} else if (type === 'filter' || type === 'export') {
-						// For filtering and export (CSV/Excel), return a plain string representation.
-						// Convert to the currently selected unit for consistency in export.
+						
 						if (numberColumnIndexes.includes(colIdx) && unitConversions[colIdx]) {
 							const currentUnitKey = getCurrentUnit(colIdx);
 							const unitDefinitions = unitConversions[colIdx].units;
 							const unitInfo = unitDefinitions[currentUnitKey];
+							
 							if (unitInfo && typeof unitInfo.factor === 'number') {
 								const convertedValue = numericData * unitInfo.factor;
-								// Return as a plain string with unit for clarity in export/filter
-								return `${convertedValue.toFixed(2).replace(/\.0+$/, '')} ${unitInfo.display}`;
+								return convertedValue.toExponential(2);
 							}
 						}
-						// Fallback for filter/export if no unit conversion or not a unit column
-						return numericData.toExponential(2); // Or just numericData if you prefer raw, non-formatted
+						
+						return numericData.toExponential(2);
+					
 					}
-
-					// Fallback for any other unexpected 'type' (should be rare)
+					
+                    return data;
+				}
+			},
+			{
+				"targets": inspireColumnIndexes,
+				"render": function(data, type, row, meta) {
+					if (type === 'display') {
+						var currentRecid = row[inspireColumnIndexes[0]];
+						if (currentRecid && $('#bib-recid-' + currentRecid).length) {
+							return `<a href="#bib-recid-${currentRecid}">${currentRecid}</a>`;
+						}
+					}
 					return data;
 				}
 			}
 		],
-    
+		
+		//To update LaTeX number rendering on every draw
 		"drawCallback": function( settings ) {
 			if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
 				MathJax.typesetPromise();
@@ -304,6 +291,7 @@ $(document).ready(function() {
 		},
 
 		initComplete: function () {
+		
 			var api = this.api();
 			var thead = $(api.table().header());
 			var filterRow = $('<tr>').appendTo(thead);
@@ -331,53 +319,57 @@ $(document).ready(function() {
 								'<option value="' + d + '">' + d + '</option>'
 							);
 						});
-				} else if (numberColumnIndexes.includes(colIdx) && unitConversions[colIdx]) {
+						
+				} else if (numberColumnIndexes.includes(colIdx) && unitConversions[colIdx]) {		
 					var unitSelect = $(`<select id="unit-select-${colIdx}"></select>`)
 						.appendTo(filterCell)
 						.on('change', function () {
-							console.log(`Unit dropdown for column ${colIdx} changed to: ${$(this).val()}`);
-
-							api.rows().invalidate('data').draw();
-
-                            console.log(`DEBUG: draw() call for column ${colIdx} initiated.`);
-                            if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
-                                MathJax.typesetPromise();
-                                console.log('DEBUG: MathJax.typesetPromise() explicitly called after draw.');
-                            }
+							api.rows().invalidate('data').draw(); 
+							if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
+								MathJax.typesetPromise();
+							}
 						});
-
-					var units = unitConversions[colIdx].units;
-					var defaultUnit = unitConversions[colIdx].default;
-
-					for (const unitKey in units) {
-						if (units.hasOwnProperty(unitKey)) {
-							unitSelect.append(
-								`<option value="${unitKey}" ${unitKey === defaultUnit ? 'selected' : ''}>${units[unitKey].display}</option>`
-							);
+						
+						var units = unitConversions[colIdx].units;
+						var defaultUnit = unitConversions[colIdx].default;
+						
+						for (const unitKey in units) {
+							if (units.hasOwnProperty(unitKey)) {
+								unitSelect.append(
+									`<option value="${unitKey}" ${unitKey === defaultUnit ? 'selected' : ''}>${units[unitKey].display}</option>`
+								);
+							}
 						}
-					}
+						
 				} else {
+					
 					filterCell.html('&nbsp;');
+					
 				}
+				
 			});
+			
 			if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
-                MathJax.typesetPromise();
-            }
+				MathJax.typesetPromise();
+			}	
 		}
-	});
 
-}); // End of $(document).ready
-
+ 	});
+ 
+ });
+ 
 $(document).on('click', 'a[href^="#bib-recid-"]', function (e) {
 	e.preventDefault();
-
+    
 	var targetId = this.getAttribute('href');
 	var $target = $(targetId);
 
 	if ($target.length) {
+
 		$('.bib-highlight').removeClass('bib-highlight');
+
 		$('html, body').animate({
-			scrollTop: $target.offset().top - 50
+			scrollTop: $target.offset().top - 50 // adjust offset if needed
 		}, 300, function () {
 			$target.addClass('bib-highlight');
 			setTimeout(() => {
