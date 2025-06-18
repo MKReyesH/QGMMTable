@@ -23,7 +23,7 @@
 
 <!--Dynamic table using js-->
 <style>
-.bib-highlight {
+.my-highlight {
 	background-color: #ffffe0;
 	border: 2px solid #ffcc00;
 	padding: 10px;
@@ -295,7 +295,7 @@ $(document).ready(function() {
 						};
 						
 						const effectSlug = slugify(data);
-						const baseUrl = 'https://mkreyesh.github.io/QGMMTable/pages/effects';
+						const baseUrl = '../effects';
 						
 						if (effectSlug) {
 							return `<a href="${baseUrl}#${effectSlug}">${data}</a>`;
@@ -391,14 +391,14 @@ $(document).on('click', 'a[href^="#bib-recid-"]', function (e) {
 
 	if ($target.length) {
 
-		$('.bib-highlight').removeClass('bib-highlight');
+		$('.my-highlight').removeClass('my-highlight');
 
 		$('html, body').animate({
 			scrollTop: $target.offset().top - 50 // adjust offset if needed
 		}, 300, function () {
-			$target.addClass('bib-highlight');
+			$target.addClass('my-highlight');
 			setTimeout(() => {
-				$target.removeClass('bib-highlight');
+				$target.removeClass('my-highlight');
 			}, 1500);
 		});
 	}
