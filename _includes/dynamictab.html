@@ -192,6 +192,9 @@ $(document).ready(function() {
 			{	//Rendering for inspire columns
 				"targets": inspireColumnIndexes,
 				"render": function (data, type, row, meta) {
+					if (type === 'display' || type === 'export') {
+						return data;
+					}
                     return data;
 				}
 			}
