@@ -94,6 +94,9 @@ $(document).ready(function() {
 	
 	//Columns with inspire ids
 	var inspireColumnIndexes = [6];
+	
+	//Columns with effects
+	var effectColumnIndexes = [2];
 
 	//Columns with filter button
 	var filterColumnIndexes = [0, 1, 2];
@@ -274,7 +277,33 @@ $(document).ready(function() {
 					if (linkedRecids.has(data)) {
 						return `<a href="#bib-recid-${data}">${data}</a>`;
 					}
-					 return data;
+					return data;
+				}
+			},
+			{
+				"targets": effectColumnIndexes,
+				"render": function(data, type, row, meta) {
+					if (type === 'display') {
+						const slugify = (text) => {
+							if (typeof text !== 'string') return '';
+							return text.toLowerCase()
+								.replace(/\s+/g, '-')
+								.replace(/[^\w-]+/g, '')
+								.replace(/[^\w-]+/g, '')
+								.replace(/[^\w-]+/g, '')
+								.replace(/[^\w-]+/g, '')
+						};
+						
+						const effectSlug = slugify(data);
+						const baseUrl = 'https://mkreyesh.github.io/QGMMTable/pages/effects';
+						
+						if (effectSlug) {
+							return `<a href="${baseUrl}#${effectSlug}">${data}</a>`;
+						}
+						
+						return data;
+					}
+					return data;
 				}
 			}
 		],
