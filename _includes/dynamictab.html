@@ -18,6 +18,7 @@
 	</tbody>
 </table>
 
+<br>
 <div id="inspireApiContent"></div>
 
 <!--Dynamic table using js-->
@@ -59,7 +60,8 @@ $(document).ready(function() {
 		"searching": true,
 		
 		layout: {
-			topStart: {
+			topStart: 'search',
+			topEnd: {
 				buttons: [
 					{
 						extend: 'csv',
@@ -80,7 +82,14 @@ $(document).ready(function() {
 						exportOptions: {
 							 orthogonal: 'export'
 						}
-					},
+					}
+				]
+			},
+			bottomStart: 'info',
+			bottomEnd: 'paging',
+			bottomBelow: {
+				buttons: [
+				
 					{
 						text: 'Generate bibliography',
 						action: function ( e, dt, button, config ) {
