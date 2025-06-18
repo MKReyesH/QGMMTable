@@ -48,15 +48,19 @@ $(document).ready(function() {
 	//Display numbers as LaTeX
 	function formatScientific(num, precision = 2) {
 		if (num === 0) {
-			return "$0$"; // Return "0" within MathJax delimiters
+			return "$0$";
 		}
 
 		const expStr = num.toExponential(precision); 
 		const parts = expStr.split('e');
 		let mantissa = parts[0];
 		let exponent = parseInt(parts[1], 10);
+		
+		if (exponent === 0) {
+			return `$${mantissa}$`;
+		}
+		
 		let exponentSign = exponent >= 0 ? '+' : '';
-
 		return `$${mantissa} \\times 10^{${exponentSign}${exponent}}$`;
 	}
 
