@@ -60,11 +60,8 @@ $(document).ready(function() {
 		"searching": true,
 		
 		layout: {
-			topStart: null,
-			topEnd: 'search′,
-			bottomStart: 'info',
-			bottomEnd: 'paging',
-			bottom2Start: {
+			topStart: 'search',
+			topEnd: {
 				buttons: [
 					{
 						text: 'Generate bibliography',
@@ -107,6 +104,8 @@ $(document).ready(function() {
 					}
 				]
 			},
+			bottomStart: 'info',
+			bottomEnd: 'paging',
 			bottom2End: {
 				buttons: [
 					{
@@ -130,7 +129,7 @@ $(document).ready(function() {
 						}
 					}
 				]
-			},
+			}
 		},
 		
 		"columnDefs": [
