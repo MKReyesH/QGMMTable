@@ -139,7 +139,9 @@ $(document).ready(function() {
 							
 							dt.rows({ search: 'applied' }).every(function () {
 								var data = this.data();
-								recids.push(data[inspireColIdx]);
+								if (data[inspireColIdx]) {
+									recids.push(data[inspireColIdx]);
+								}
 							});
 							
 							if (recids.length === 0) {
@@ -249,7 +251,11 @@ $(document).ready(function() {
 						
 						return numericData;
 						
-					} else if (type === 'filter' || type === 'export') {
+					} else if (type === 'export') {
+						
+						return numericData.toExponential(2);
+						
+					} else if (type === 'filter') {
 						
 						if (numberColumnIndexes.includes(colIdx) && unitConversions[colIdx]) {
 							const currentUnitKey = getCurrentUnit(colIdx);
@@ -258,11 +264,11 @@ $(document).ready(function() {
 							
 							if (unitInfo && typeof unitInfo.factor === 'number') {
 								const convertedValue = numericData * unitInfo.factor;
-								return convertedValue.toExponential(2);
+								return convertedValue
 							}
 						}
 						
-						return numericData.toExponential(2);
+						return numericData
 					
 					}
 					
@@ -272,12 +278,6 @@ $(document).ready(function() {
 			{
 				"targets": inspireColumnIndexes,
 				"render": function(data, type, row, meta) {
-					if (type === 'display') {
-						var currentRecid = row[inspireColumnIndexes[0]];
-						if (currentRecid && $('#bib-recid-' + currentRecid).length) {
-							return `<a href="#bib-recid-${currentRecid}">${currentRecid}</a>`;
-						}
-					}
 					return data;
 				}
 			}
