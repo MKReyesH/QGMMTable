@@ -233,43 +233,69 @@ $(document).ready(function() {
 			bottomEnd: 'paging'
 		},
 
- 		"columnDefs": [
+		"columnDefs": [
 			{	//Rendering for number columns
 				"targets": numberColumnIndexes,
-				"type": "num",
+				"type": "num", // Essential for correct numeric sorting
 				"render": function (data, type, row, meta) {
-                    console.log(`RENDER TEST HIT for col: ${meta.col}, type: ${type}. Data: ${data}`);
+                    // console.log(`RENDER TEST HIT for col: ${meta.col}, type: ${type}. Data: ${data}`); // Keep for debugging if needed
 
 					let numericData = parseFloat(data);
-					if (isNaN(numericData)) {
+
+					// If data is not a valid number, return it as is for all types.
+					if (isNaN(numericData) || numericData === null || numericData === undefined) {
 						return data;
 					}
 
 					const colIdx = meta.col;
 
-                    // ****** REMOVE THE OUTER if (type === 'display') TEMPORARILY ******
-                    // Just run the conversion directly for all types for debugging
-                    const currentUnitKey = getCurrentUnit(colIdx);
-                    const unitDefinitions = unitConversions[colIdx].units;
-                    const unitInfo = unitDefinitions[currentUnitKey];
+					// --- Handle different render 'type's ---
+					if (type === 'display') {
+						// This block is for what the user *sees* in the table (HTML/MathJax)
+						if (numberColumnIndexes.includes(colIdx) && unitConversions[colIdx]) {
+							const currentUnitKey = getCurrentUnit(colIdx);
+							const unitDefinitions = unitConversions[colIdx].units;
+							const unitInfo = unitDefinitions[currentUnitKey];
 
-                    console.log(`Current Unit Key for col ${colIdx}: ${currentUnitKey}`);
-                    console.log(`Unit Info for col ${colIdx}:`, unitInfo);
+							if (unitInfo && typeof unitInfo.factor === 'number') {
+								const convertedValue = numericData * unitInfo.factor;
+								return displayLatexNumber(convertedValue, 2, unitInfo.display);
+							} else {
+								// Fallback for display if unit info is missing/invalid
+								console.warn(`Unit conversion failed for column ${colIdx}, unit ${currentUnitKey}. Displaying raw formatted number.`);
+								return displayLatexNumber(numericData, 2, '');
+							}
+						}
+						// If it's a number column but no specific unit conversion defined, just display it formatted
+						return displayLatexNumber(numericData, 2);
 
+					} else if (type === 'sort' || type === 'type') {
+						// For sorting and internal DataTables type detection,
+						// always return the raw numeric value. This is CRUCIAL for numeric sorting.
+						return numericData;
 
-                    if (unitInfo && typeof unitInfo.factor === 'number') {
-                        const convertedValue = numericData * unitInfo.factor;
-                        console.log(`Converted Value for col ${colIdx}: ${convertedValue}`);
-                        // Always return the MathJax formatted string for all types (temporarily)
-                        return displayLatexNumber(convertedValue, 2, unitInfo.display);
-                    } else {
-                        console.warn(`Unit conversion failed for column ${colIdx}, unit ${currentUnitKey}. UnitInfo invalid.`);
-                        // Always return the default MathJax formatted string
-                        return displayLatexNumber(numericData, 2, '');
-                    }
-                }
-            }
-        ],
+					} else if (type === 'filter' || type === 'export') {
+						// For filtering and export (CSV/Excel), return a plain string representation.
+						// Convert to the currently selected unit for consistency in export.
+						if (numberColumnIndexes.includes(colIdx) && unitConversions[colIdx]) {
+							const currentUnitKey = getCurrentUnit(colIdx);
+							const unitDefinitions = unitConversions[colIdx].units;
+							const unitInfo = unitDefinitions[currentUnitKey];
+							if (unitInfo && typeof unitInfo.factor === 'number') {
+								const convertedValue = numericData * unitInfo.factor;
+								// Return as a plain string with unit for clarity in export/filter
+								return `${convertedValue.toFixed(2).replace(/\.0+$/, '')} ${unitInfo.display}`;
+							}
+						}
+						// Fallback for filter/export if no unit conversion or not a unit column
+						return numericData.toExponential(2); // Or just numericData if you prefer raw, non-formatted
+					}
+
+					// Fallback for any other unexpected 'type' (should be rare)
+					return data;
+				}
+			}
+		],
     
 		"drawCallback": function( settings ) {
 			if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
