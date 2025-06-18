@@ -64,6 +64,26 @@ $(document).ready(function() {
 			topEnd: {
 				buttons: [
 					{
+						extend: 'csv',
+						exportOptions: {
+							 orthogonal: 'export'
+						},
+						fieldBoundary: '',
+						fieldSeparator: ', '
+					},
+					{
+						extend: 'excel',
+						exportOptions: {
+							 orthogonal: 'export'
+						}
+					},
+					{
+						extend: 'pdf',
+						exportOptions: {
+							 orthogonal: 'export'
+						}
+					},
+					{
 						text: 'Generate bibliography',
 						action: function ( e, dt, button, config ) {
 							var recids = [];
@@ -105,31 +125,7 @@ $(document).ready(function() {
 				]
 			},
 			bottomStart: 'info',
-			bottomEnd: 'paging',
-			bottom2End: {
-				buttons: [
-					{
-						extend: 'csv',
-						exportOptions: {
-							 orthogonal: 'export'
-						},
-						fieldBoundary: '',
-						fieldSeparator: ', '
-					},
-					{
-						extend: 'excel',
-						exportOptions: {
-							 orthogonal: 'export'
-						}
-					},
-					{
-						extend: 'pdf',
-						exportOptions: {
-							 orthogonal: 'export'
-						}
-					}
-				]
-			}
+			bottomEnd: 'paging'
 		},
 		
 		"columnDefs": [
