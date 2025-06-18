@@ -5,27 +5,28 @@
 
 <table id="datatable" class="display">
 	<thead>
-	{% assign headersArray = site.data.database[0] %}
 		<tr>
-		{% for header in headersArray %}
-			<th>{{ header }}</th>
+		{% for pair in site.data.database[0] %}
+			<th>{{ pair[0] }}</th>
 		{% endfor %}
 		</tr>
 	</thead>
 	<tbody>
 	{% for row in site.data.database %}
 		<tr>
-		{% for header in headers %}
-			{% assign cellValue = row[header] %}
-			{% assign columnClass = "string" %}
+		{% for pair in row %}
+			{% assign colIdx = forloop.index0 %}
+			{% assign cellClass = "string" %}
 			
-			{% if numericColumnIndices contains forloop.index0 | append: "" %}
-				{% assign columnClass = "number" %}
-			{% elsif inspireColumnIndices contains forloop.index0 | append: "" %}
-				{% assign columnClass = "inspire" %}
+			{% if numericColumnIndices contains colIdx %}
+				{% assign cellClass = "number" %}
 			{% endif %}
-				 
-			<td class="{{ columnClass }}">{{ cellValue }}</td>
+			
+			{% if inspireColumnIndices contains colIdx %}
+				{% assign cellClass = "inspire" %}
+			{% endif %}
+			
+			<td class="{{ cellClass }}>{{ pair[1] }}</td>
 		{% endfor %}
 		</tr>
 	{% endfor %}
