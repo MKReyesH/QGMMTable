@@ -307,8 +307,7 @@ $(document).ready(function() {
 						.on('change', function () {
 							console.log(`Unit dropdown for column ${colIdx} changed to: ${$(this).val()}`);
 
-							api.draw(); // Original working line if `api` is valid
-                            // We are trying this specific call for diagnosis
+							api.clear().draw(); 
 
                             console.log(`DEBUG: draw() call for column ${colIdx} initiated.`);
                             if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
