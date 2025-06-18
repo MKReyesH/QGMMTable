@@ -90,7 +90,7 @@ $(document).ready(function() {
 						text: 'Generate bibliography',
 						action: function ( e, dt, button, config ) {
 							var recids = [];
-							var recids = [];
+							var inspireColIdx = inspireColumnIndexes[0];
 							
 							dt.rows({ search: 'applied' }).every(function () {
 								var data = this.data();
