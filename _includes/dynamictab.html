@@ -239,6 +239,9 @@ $(document).ready(function() {
 				"targets": numberColumnIndexes,
 				"type": "num", // Essential for numerical sorting
 				"render": function (data, type, row, meta) {
+					
+					console.log(`RENDER FUNCTION HIT for col: ${meta.col}, type: ${type}`);
+					
 					let numericData = parseFloat(data);
 
 					if (isNaN(numericData)) {
