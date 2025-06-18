@@ -223,7 +223,7 @@ $(document).ready(function() {
 						.on('change', function () {
 							var val = $(this).val();
 							column
-								.search(val ? '^' + val + '$' : '', true, false)
+								.search(val ? '^' + val.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$' : '', true, false)
 								.draw();
 						});
 					column
