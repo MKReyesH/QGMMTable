@@ -280,9 +280,8 @@ $(document).ready(function() {
 								currentColumnUnits[colIdx] = { value: 1, label: 'Error Unit' };
 							}
 							
-							console.log("Updated currentColumnUnits for column", colIdx, ":", currentColumnUnits[colIdx]);
-							column.invalidate('data').draw(); 
-							console.log("Column redraw triggered for column:", colIdx);
+							let currentColumnApi = api.column(colIdx);
+							currentColumnApi.invalidate('data').draw();
 														
 						});
 					
