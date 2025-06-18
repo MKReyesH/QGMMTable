@@ -146,11 +146,12 @@ $(document).ready(function() {
 									api.rows({ search: 'applied' }).every(function () {
 										var rowNode = this.node();
 										var rowData = this.data();
+										var currentRecid = rowData[inspireColIdx];
 										var cell = $(rowNode).find('td').eq(inspireColIdx); 
-										if (recid && $('#bib-recid-' + recid).length) {
-											cell.html(`<a href="#bib-recid-${recid}">${recid}</a>`);
+										if (currentRecid && $('#bib-recid-' + currentRecid).length) {
+											cell.html(`<a href="#bib-recid-${currentRecid}">${currentRecid}</a>`);
 										} else {
-											cell.html(recid);
+											cell.html(currentRecid);
 										}
 									});
 									
