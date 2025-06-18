@@ -186,7 +186,8 @@ $(document).ready(function() {
 				"targets": numberColumnIndexes,
 				"type": "num",
 				"render": function (data, type, row, meta) {
-					let numericData = parseFloat(data);
+					let colIdx = meta.col;
+					let numericData = parseFloat(row[meta.col]);
 					
 					if (isNaN(numericData)) {
 						return data;
