@@ -32,3 +32,136 @@
 	{% endfor %}
 	</tbody>
 </table>
+
+<!--Dynamic table using js-->
+<script>
+$(document).ready(function() {
+
+	//Columns which filter button
+	var filterColumnIndexes = [0, 1, 2];
+	
+	//Number of rows entries per page
+	var rowsPerPage = 30;
+	
+	//Display numbers as LaTeX
+	function formatScientific(num, precision = 2) {
+		if (num === 0) {
+			return "$0$"; // Return "0" within MathJax delimiters
+		}
+
+		const expStr = num.toExponential(precision); 
+		const parts = expStr.split('e');
+		let mantissa = parts[0];
+		let exponent = parseInt(parts[1], 10);
+		let exponentSign = exponent >= 0 ? '+' : '';
+
+		return `$${mantissa} \\times 10^{${exponentSign}${exponent}}$`;
+	}
+
+	//Dynamic table rendering
+	var table = $('#datatable').DataTable({
+		
+		"lengthChange": false,
+		"pageLength": rowsPerPage,
+		"searching": true,
+		
+		layout: {
+			topStart: {
+				buttons: [
+					{
+						extend: 'csv',
+						exportOptions: {
+							 orthogonal: 'export'
+						},
+						fieldBoundary: '',
+						fieldSeparator: ', '
+					},
+					{
+						extend: 'excel',
+						exportOptions: {
+							 orthogonal: 'export'
+						}
+					},
+					{
+						extend: 'pdf',
+						exportOptions: {
+							 orthogonal: 'export'
+						}
+					}
+				]
+			}
+		},
+		
+		"columnDefs": [
+			{
+				"targets": '_all',
+				"type": "num",
+				"render": function (data, type, row, meta) {
+					var cellNode = table.cell(meta.row, meta.col).node();
+					if ($(cellNode).hasClass('number')) {
+						
+						let numericData = parseFloat(data);
+					
+						if (isNaN(numericData)) {
+							return data;
+						}
+					
+						if (type === 'display') {
+							return formatScientific(numericData, 2);
+						} else if (type === 'export') {
+							return numericData;
+						}
+						
+					}
+					
+                    return data;
+				}
+			}
+		],
+		
+		//To update LaTeX number rendering
+		"drawCallback": function( settings ) {
+			if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
+				MathJax.typesetPromise();
+			}
+		},
+
+		initComplete: function () {
+		
+			var api = this.api();
+			var thead = $(api.table().header());
+			var filterRow = $('<tr>').appendTo(thead);
+
+			api.columns().every(function (colIdx) {
+				var column = this;
+				var headerText = $(column.header()).text();
+				var filterCell = $('<th>').appendTo(filterRow);
+
+				if (filterColumnIndexes.includes(colIdx)) {
+					var select = $('<select><option value="">All ' + headerText + '</option></select>')
+						.appendTo(filterCell)
+						.on('change', function () {
+							var val = $(this).val();
+							column
+								.search(val ? '^' + val + '$' : '', true, false)
+								.draw();
+						});
+					column
+						.data()
+						.unique()
+						.sort()
+						.each(function (d, j) {
+							select.append(
+								'<option value="' + d + '">' + d + '</option>'
+							);
+						});
+				} else {
+					filterCell.html('&nbsp;');
+				}
+			});
+		}
+
+ 	});
+ 
+ });
+</script>
