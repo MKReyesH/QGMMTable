@@ -80,6 +80,41 @@ $(document).ready(function() {
 						}
 					}
 				]
+			},
+			topEnd: {
+				'search'
+			},
+			bottomStart: {
+				'info'
+			},
+			bottomEnd: {
+				'paging',
+				buttons: [
+					{
+						text: 'Generate bibliography',
+						action: function ( e, dt, button, config ) {
+							var recids = [];
+							var recids = [];
+							
+							dt.rows({ search: 'applied' }).every(function () {
+								var data = this.data();
+								recids.push(data[inspireColIdx]);
+							});
+							
+							if (recids.length === 0) {
+								alert('No filtered rows to generate an Inspire API URL.');
+								return;
+							}
+							
+							var queryString = recids.map(recid => `recid:${recid}`).join(' OR ');
+							var encodedQueryString = encodeURIComponent(queryString);
+							
+							var inspireApiUrl = `https://inspirehep.net/api/literature/?q=${encodedQueryString}&format=cv`;
+							
+							window.open(inspireApiUrl, '_blank');
+						}
+					}
+				]
 			}
 		},
 		
