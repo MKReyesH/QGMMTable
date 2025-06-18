@@ -85,42 +85,35 @@ $(document).ready(function() {
 
 	// --- Function to get the current unit for a column ---
 	function getCurrentUnit(colIdx) {
-		// Try to get the selected value from the dropdown.
-		// If the dropdown doesn't exist or has no value (e.g., during initial load before dropdown is ready),
-		// fall back to the default unit defined in unitConversions.
-		var currentUnit = $(`#unit-select-${colIdx}`).val();
-		return currentUnit || (unitConversions[colIdx] ? unitConversions[colIdx].default : '');
+		var $selectElement = $(`#unit-select-${colIdx}`);
+		if ($selectElement.length) {
+			return $selectElement.val();
+		}
+		return unitConversions[colIdx] ? unitConversions[colIdx].default : '';
 	}
 
 	// Display numbers as LaTeX
 	function displayLatexNumber(num, precision = 2, unit = '') {
 		if (isNaN(num) || num === null || num === undefined) {
-			return ''; // Or whatever placeholder you prefer for non-numeric/null data
+			return '';
 		}
 
-		// Use a more readable format for numbers near 0 or small integers
 		if (num === 0) {
 			return `$0 ${unit}$`;
 		}
 
-        // Adjust precision for very small numbers to avoid excessive zeros
         let actualPrecision = precision;
-        if (Math.abs(num) > 0 && Math.abs(num) < 0.001) { // Numbers smaller than 0.001
+        if (Math.abs(num) > 0 && Math.abs(num) < 0.001) {
             // Use scientific notation, `precision` will apply to mantissa
         } else if (Math.abs(num) >= 0.001 && Math.abs(num) < 10000) {
-            // Display as fixed decimal for numbers between 0.001 and 10000
-            // Find appropriate precision to avoid trailing zeros but show enough detail
-            if (num % 1 === 0) { // If it's an integer
+            if (num % 1 === 0) {
                 actualPrecision = 0;
             } else {
                 actualPrecision = Math.max(precision, Math.min(6, num.toString().split('.')[1] ? num.toString().split('.')[1].length : 0));
-                // Cap at 6 decimal places for display, or original precision, or actual decimal length
             }
-            return `$${num.toFixed(actualPrecision).replace(/\.0+$/, '')} ${unit}$`; // Remove trailing .00
+            return `$${num.toFixed(actualPrecision).replace(/\.0+$/, '')} ${unit}$`;
         }
 
-
-		// Fallback to scientific notation for very large or very small numbers
 		const expStr = num.toExponential(precision);
 		const parts = expStr.split('e');
 		let mantissa = parts[0];
@@ -130,7 +123,8 @@ $(document).ready(function() {
 	}
 
 	//Dynamic table rendering
-	var table = $('#datatable').DataTable({
+	// ****** RENAMED 'table' to 'myDataTable' ******
+	var myDataTable = $('#datatable').DataTable({
 
 		"lengthChange": false,
 		"pageLength": rowsPerPage,
@@ -143,25 +137,22 @@ $(document).ready(function() {
 					{
 						extend: 'csv',
 						exportOptions: {
-							 orthogonal: 'export' // Exports the original numeric data (from render type 'export')
+							 orthogonal: 'export'
 						},
-						fieldBoundary: '', // Often better to use '"' for fieldBoundary
+						fieldBoundary: '',
 						fieldSeparator: ', '
 					},
 					{
 						extend: 'excel',
 						exportOptions: {
-							 orthogonal: 'export' // Exports the original numeric data
+							 orthogonal: 'export'
 						}
 					},
 					{
 						extend: 'pdf',
 						exportOptions: {
-							 orthogonal: 'export' // Exports the original numeric data
+							 orthogonal: 'export'
 						},
-                        // You might need to configure pdf make further for complex LaTeX,
-                        // or ensure the 'export' type returns plain text for PDF.
-                        // Currently, orthogonal 'export' returns plain text for numbers, which is good.
 					},
 					{
 						text: 'Generate bibliography',
@@ -171,7 +162,6 @@ $(document).ready(function() {
 
 							dt.rows({ search: 'applied' }).every(function () {
 								var data = this.data();
-								// Ensure the data at inspireColIdx is actually present before pushing
 								if (data[inspireColIdx]) {
 								    recids.push(data[inspireColIdx]);
 								}
@@ -197,44 +187,36 @@ $(document).ready(function() {
 
 									tempDiv.contents().each(function(index, element) {
 										var $element = $(element);
-										// Check if it's a paragraph containing a bold link to an inspirehep literature entry
 										if ($element.is('p') && $element.find('b a[href*="inspirehep.net/literature/"]').length) {
-
 											if (currentEntryDiv) {
-												processedHtml += currentEntryDiv.prop('outerHTML'); // Append previous entry
+												processedHtml += currentEntryDiv.prop('outerHTML');
 											}
-
 											var href = $element.find('a').attr('href');
 											var match = href ? href.match(/literature\/(\d+)$/) : null;
 											var recid = (match && match[1]) ? match[1] : 'unknown';
 
 											currentEntryDiv = $('<div>').attr('id', 'bib-recid-' + recid);
-											currentEntryDiv.append($element.clone()); // Start new entry with this paragraph
-
-										} else if (currentEntryDiv) {
-											// Append subsequent elements to the current entry
 											currentEntryDiv.append($element.clone());
-
+										} else if (currentEntryDiv) {
+											currentEntryDiv.append($element.clone());
 										}
 									});
 
 									if (currentEntryDiv) {
-										processedHtml += currentEntryDiv.prop('outerHTML'); // Append the last entry
+										processedHtml += currentEntryDiv.prop('outerHTML');
 									}
 
 									$('#inspireApiContent').html(processedHtml);
 
-									// Update table cells with links to generated bibliography
 									dt.rows({ search: 'applied' }).every(function () {
-										var rowNode = this.node(); // Get the HTML row element
-										var rowData = this.data(); // Get the DataTables row data
+										var rowNode = this.node();
+										var rowData = this.data();
 										var currentRecid = rowData[inspireColIdx];
-										var cell = $(rowNode).find('td').eq(inspireColIdx); // Find the cell
-
+										var cell = $(rowNode).find('td').eq(inspireColIdx);
 										if (currentRecid && $('#bib-recid-' + currentRecid).length) {
 											cell.html(`<a href="#bib-recid-${currentRecid}">${currentRecid}</a>`);
 										} else {
-											cell.html(currentRecid); // Keep original if no match
+											cell.html(currentRecid);
 										}
 									});
 
@@ -260,10 +242,10 @@ $(document).ready(function() {
 					let numericData = parseFloat(data);
 
 					if (isNaN(numericData)) {
-						return data; // Return original if not a number
+						return data;
 					}
 
-					const colIdx = meta.col; // THIS IS THE COLUMN INDEX OF THE CELL BEING RENDERED
+					const colIdx = meta.col;
 
                     // Debugging logs:
                     console.log(`--- Render for col: ${colIdx}, type: ${type} ---`);
@@ -274,7 +256,7 @@ $(document).ready(function() {
 
 					if (numberColumnIndexes.includes(colIdx) && unitConversions[colIdx]) {
 						if (type === 'display') {
-							const currentUnitKey = getCurrentUnit(colIdx); // GETS THE UNIT FOR *THIS* COLIDX
+							const currentUnitKey = getCurrentUnit(colIdx);
                             const unitDefinitions = unitConversions[colIdx].units;
                             const unitInfo = unitDefinitions[currentUnitKey];
 
@@ -283,7 +265,6 @@ $(document).ready(function() {
 
 
                             if (unitInfo && typeof unitInfo.factor === 'number') {
-                                // Assuming numericData is ALREADY in the base unit (factor: 1)
                                 const convertedValue = numericData * unitInfo.factor;
                                 console.log(`Converted Value for col ${colIdx}: ${convertedValue}`);
                                 return displayLatexNumber(convertedValue, 2, unitInfo.display);
@@ -296,7 +277,6 @@ $(document).ready(function() {
 						}
 					}
 
-					// Fallback for types not handled by unit conversion, or non-number columns
 					if (type === 'display') {
 						 return displayLatexNumber(numericData, 2);
 					} else if (type === 'export') {
@@ -308,18 +288,14 @@ $(document).ready(function() {
 			}
 		],
 
-		// To update LaTeX number rendering
 		"drawCallback": function( settings ) {
 			if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
-				// Only typeset if there are new math elements or potentially changed ones.
-				// DataTables redraws entire cells, so MathJax needs to re-process those.
 				MathJax.typesetPromise();
 			}
 		},
 
 		initComplete: function () {
-
-			var api = this.api();
+			var api = this.api(); // 'this.api()' correctly gets the instance's API
 			var thead = $(api.table().header());
 			var filterRow = $('<tr>').appendTo(thead);
 
@@ -329,7 +305,6 @@ $(document).ready(function() {
 				var filterCell = $('<th>').appendTo(filterRow);
 
 				if (filterColumnIndexes.includes(colIdx)) {
-					// Existing Text Filter Dropdown
 					var select = $('<select><option value="">All ' + headerText + '</option></select>')
 						.appendTo(filterCell)
 						.on('change', function () {
@@ -348,44 +323,40 @@ $(document).ready(function() {
 							);
 						});
 				} else if (numberColumnIndexes.includes(colIdx) && unitConversions[colIdx]) {
-					// --- NEW: Unit Conversion Dropdown ---
 					var unitSelect = $(`<select id="unit-select-${colIdx}"></select>`)
 						.appendTo(filterCell)
 						.on('change', function () {
-							// DataTables 2.0+ way to trigger re-rendering:
-							// Simply redraw the table. The render function for affected cells will be re-evaluated.
 							console.log(`Unit dropdown for column ${colIdx} changed to: ${$(this).val()}`);
-							api.draw(); // CORRECTED LINE
-							console.log(`DEBUG: api.draw() for column ${colIdx} has been called.`); // ADD THIS NEW LINE
-							
-							            // Double check that MathJax is ready and triggered for redraws, although drawCallback should handle it
-            if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
-                MathJax.typesetPromise(); // Manually trigger MathJax update here as well, just in case
-                console.log('DEBUG: MathJax.typesetPromise() explicitly called after draw.');
-            }
+
+							api.draw(); // This `api` variable is correctly scoped here
+                            console.log(`DEBUG: api.draw() for column ${colIdx} has been called.`);
+                            if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
+                                MathJax.typesetPromise();
+                                console.log('DEBUG: MathJax.typesetPromise() explicitly called after draw.');
+                            }
 						});
 
 					var units = unitConversions[colIdx].units;
 					var defaultUnit = unitConversions[colIdx].default;
 
-					// Populate dropdown with units for this column
 					for (const unitKey in units) {
-						if (units.hasOwnProperty(unitKey)) { // Best practice to check property
+						if (units.hasOwnProperty(unitKey)) {
 							unitSelect.append(
 								`<option value="${unitKey}" ${unitKey === defaultUnit ? 'selected' : ''}>${units[unitKey].display}</option>`
 							);
 						}
 					}
-					// --- END NEW ---
 				} else {
 					filterCell.html('&nbsp;');
 				}
 			});
+			if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
+                MathJax.typesetPromise();
+            }
 		}
-
 	});
 
-});
+}); // End of $(document).ready
 
 $(document).on('click', 'a[href^="#bib-recid-"]', function (e) {
 	e.preventDefault();
@@ -394,15 +365,13 @@ $(document).on('click', 'a[href^="#bib-recid-"]', function (e) {
 	var $target = $(targetId);
 
 	if ($target.length) {
-
-		$('.bib-highlight').removeClass('bib-highlight'); // Remove highlight from any previously highlighted entry
-
+		$('.bib-highlight').removeClass('bib-highlight');
 		$('html, body').animate({
-			scrollTop: $target.offset().top - 50 // adjust offset if needed to account for fixed headers etc.
+			scrollTop: $target.offset().top - 50
 		}, 300, function () {
-			$target.addClass('bib-highlight'); // Add highlight after scrolling
+			$target.addClass('bib-highlight');
 			setTimeout(() => {
-				$target.removeClass('bib-highlight'); // Remove highlight after a delay
+				$target.removeClass('bib-highlight');
 			}, 1500);
 		});
 	}
