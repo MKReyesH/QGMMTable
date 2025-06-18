@@ -112,7 +112,7 @@ $(document).ready(function() {
 					if (type === 'display') {
 						const encodedData = encodeURIComponent(data);
 						const inspireUrl = `https://inspirehep.net/literature/${encodedData}`;
-						return `<a href="${inspireUrl}">${data}</a>`;
+						return `<a href="${inspireUrl}" target="_blank">${data}</a>`;
 					}
 					
                     return data;
