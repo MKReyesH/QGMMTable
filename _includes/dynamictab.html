@@ -22,6 +22,12 @@
 <div id="inspireApiContent"></div>
 
 <!--Dynamic table using js-->
+<style>
+.bib-highlight {
+	background-color: yellow;
+	transition: background-color 0.5s ease;
+}
+</style>
 <script>
 $(document).ready(function() {
 
@@ -236,4 +242,25 @@ $(document).ready(function() {
  	});
  
  });
+ 
+$(document).on('click', 'a[href^="#bib-recid-"]', function (e) {
+	e.preventDefault();
+    
+	var targetId = this.getAttribute('href');
+	var $target = $(targetId);
+
+	if ($target.length) {
+
+		$('.bib-highlight').removeClass('bib-highlight');
+
+		$('html, body').animate({
+			scrollTop: $target.offset().top - 50 // adjust offset if needed
+		}, 300, function () {
+			$target.addClass('bib-highlight');
+			setTimeout(() => {
+				$target.removeClass('bib-highlight');
+			}, 1500);
+		});
+	}
+});
 </script>
