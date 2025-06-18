@@ -263,34 +263,47 @@ $(document).ready(function() {
 						return data; // Return original if not a number
 					}
 
-					// Apply Unit Conversion for Display and handle export/sort
-					const colIdx = meta.col;
+					const colIdx = meta.col; // THIS IS THE COLUMN INDEX OF THE CELL BEING RENDERED
+
+                    // Debugging logs:
+                    console.log(`--- Render for col: ${colIdx}, type: ${type} ---`);
+                    console.log(`Original data: ${data}, numericData: ${numericData}`);
+                    console.log(`Is numeric column? ${numberColumnIndexes.includes(colIdx)}`);
+                    console.log(`Has unit conversions defined? ${!!unitConversions[colIdx]}`);
+
+
 					if (numberColumnIndexes.includes(colIdx) && unitConversions[colIdx]) {
-						// For display, get the currently selected unit and apply its factor
 						if (type === 'display') {
-							const currentUnitKey = getCurrentUnit(colIdx);
-							const unitInfo = unitConversions[colIdx].units[currentUnitKey];
-                            // Assuming 'numericData' (from your CSV) is already in the 'base unit' (factor: 1)
-                            // If your CSV data is in 'default' unit and its factor is not 1,
-                            // you'd first convert to the implicit base unit (value / default_factor),
-                            // then convert to target unit ( * target_factor).
-                            // But typically, you set the CSV's implicit unit to be the 'factor: 1' unit.
-							const convertedValue = numericData * unitInfo.factor;
-							return displayLatexNumber(convertedValue, 2, unitInfo.display);
+							const currentUnitKey = getCurrentUnit(colIdx); // GETS THE UNIT FOR *THIS* COLIDX
+                            const unitDefinitions = unitConversions[colIdx].units;
+                            const unitInfo = unitDefinitions[currentUnitKey];
+
+                            console.log(`Current Unit Key for col ${colIdx}: ${currentUnitKey}`);
+                            console.log(`Unit Info for col ${colIdx}:`, unitInfo);
+
+
+                            if (unitInfo && typeof unitInfo.factor === 'number') {
+                                // Assuming numericData is ALREADY in the base unit (factor: 1)
+                                const convertedValue = numericData * unitInfo.factor;
+                                console.log(`Converted Value for col ${colIdx}: ${convertedValue}`);
+                                return displayLatexNumber(convertedValue, 2, unitInfo.display);
+                            } else {
+                                console.warn(`Unit conversion failed for column ${colIdx}, unit ${currentUnitKey}. UnitInfo invalid.`);
+                                return displayLatexNumber(numericData, 2, '');
+                            }
 						} else if (type === 'export' || type === 'sort') {
-							 // Always export/sort the original numeric data in its base unit from CSV
-							 return numericData.toExponential(2); // Provide scientific notation for export/sort
+							 return numericData.toExponential(2);
 						}
 					}
 
 					// Fallback for types not handled by unit conversion, or non-number columns
 					if (type === 'display') {
-						 return displayLatexNumber(numericData, 2); // Original behavior without unit
+						 return displayLatexNumber(numericData, 2);
 					} else if (type === 'export') {
 						return numericData.toExponential(2);
 					}
 
-					return data; // Default behavior
+					return data;
 				}
 			}
 		],
