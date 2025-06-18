@@ -22,13 +22,21 @@
 <div id="inspireApiContent"></div>
 
 <!--Dynamic table using js-->
+<style>
+.bib-highlight {
+	background-color: #ffffe0;
+	border: 2px solid #ffcc00;
+	padding: 10px;
+	transition: background-color 0.5s ease-out, border-color 0.5s ease-out;
+}
+</style>
 <script>
 $(document).ready(function() {
 
 	//Columns with LaTeX number rendering
 	var numberColumnIndexes = [3, 4, 5];
 	
-	//Columns with inspire rendering
+	//Columns with inspire ids
 	var inspireColumnIndexes = [6];
 
 	//Columns with filter button
@@ -40,16 +48,19 @@ $(document).ready(function() {
 	//Display numbers as LaTeX
 	function formatScientific(num, precision = 2) {
 		if (num === 0) {
-			return "$0$"; // Return "0" within MathJax delimiters
+			return "$0$";
 		}
 
 		const expStr = num.toExponential(precision); 
 		const parts = expStr.split('e');
 		let mantissa = parts[0];
 		let exponent = parseInt(parts[1], 10);
-		let exponentSign = exponent >= 0 ? '+' : '';
-
-		return `$${mantissa} \\times 10^{${exponentSign}${exponent}}$`;
+		
+		if (exponent === 0) {
+			return `$${mantissa}$`;
+		}
+		
+		return `$${mantissa} \\times 10^{${exponent}}$`;
 	}
 
 	//Dynamic table rendering
@@ -108,12 +119,53 @@ $(document).ready(function() {
 								url: inspireApiUrl,
 								method: 'GET',
 								success: function(responseHtml) {
-
-									$('#inspireApiContent').html(responseHtml);
+									var tempDiv = $('<div>').html(responseHtml);
+									var processedHtml = '';
+									var currentEntryDiv = null;
 									
-									//if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
-									//	MathJax.typesetPromise();
-									//}
+									tempDiv.contents().each(function(index, element) {
+										var $element = $(element);
+										if ($element.is('p') && $element.find('b a[href*="inspirehep.net/literature/"]').length) {
+											
+											if (currentEntryDiv) {
+												processedHtml += currentEntryDiv.prop('outerHTML');
+											}
+											
+											var href = $element.find('a').attr('href');
+											var match = href.match(/literature\/(\d+)$/);
+											var recid = match ? match[1] : 'unknown';
+											
+											currentEntryDiv = $('<div>').attr('id', 'bib-recid-' + recid);
+											currentEntryDiv.append($element.clone());
+											
+										} else if (currentEntryDiv) {
+											
+											currentEntryDiv.append($element.clone());
+											
+										}
+									});
+									
+									if (currentEntryDiv) {
+										processedHtml += currentEntryDiv.prop('outerHTML');
+									}
+									
+									$('#inspireApiContent').html(processedHtml);
+									
+									var api = $('#datatable').DataTable();
+									var inspireColIdx = inspireColumnIndexes[0];
+									
+									api.rows({ search: 'applied' }).every(function () {
+										var rowNode = this.node();
+										var rowData = this.data();
+										var currentRecid = rowData[inspireColIdx];
+										var cell = $(rowNode).find('td').eq(inspireColIdx); 
+										if (currentRecid && $('#bib-recid-' + currentRecid).length) {
+											cell.html(`<a href="#bib-recid-${currentRecid}">${currentRecid}</a>`);
+										} else {
+											cell.html(currentRecid);
+										}
+									});
+									
 								},
 								error: function(jqXHR, textStatus, errorThrown) {
 									console.error('Error fetching Inspire API content:', textStatus, errorThrown, jqXHR);
@@ -147,19 +199,6 @@ $(document).ready(function() {
 					
                     return data;
 				}
-			},
-			{	//Rendering for inspire columns
-				"targets": inspireColumnIndexes,
-				"render": function (data, type, row, meta) {
-					
-					if (type === 'display') {
-						const encodedData = encodeURIComponent(data);
-						const inspireUrl = `https://inspirehep.net/literature/${encodedData}`;
-						return `<a href="${inspireUrl}" target="_blank">${data}</a>`;
-					}
-					
-                    return data;
-				}
 			}
 		],
 		
@@ -187,7 +226,7 @@ $(document).ready(function() {
 						.on('change', function () {
 							var val = $(this).val();
 							column
-								.search(val ? '^' + val + '$' : '', true, false)
+								.search(val ? '^' + val.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$' : '', true, false)
 								.draw();
 						});
 					column
@@ -208,4 +247,25 @@ $(document).ready(function() {
  	});
  
  });
+ 
+$(document).on('click', 'a[href^="#bib-recid-"]', function (e) {
+	e.preventDefault();
+    
+	var targetId = this.getAttribute('href');
+	var $target = $(targetId);
+
+	if ($target.length) {
+
+		$('.bib-highlight').removeClass('bib-highlight');
+
+		$('html, body').animate({
+			scrollTop: $target.offset().top - 50 // adjust offset if needed
+		}, 300, function () {
+			$target.addClass('bib-highlight');
+			setTimeout(() => {
+				$target.removeClass('bib-highlight');
+			}, 1500);
+		});
+	}
+});
 </script>
