@@ -31,7 +31,6 @@
 }
 </style>
 <script>
-var currentColumnUnits = {};
 $(document).ready(function() {
 
 	//Columns with LaTeX number rendering
@@ -186,20 +185,16 @@ $(document).ready(function() {
 				"targets": numberColumnIndexes,
 				"type": "num",
 				"render": function (data, type, row, meta) {
-					let colIdx = meta.col;
-					let rawValue = parseFloat(row[colIdx]);
+					let numericData = parseFloat(data);
 					
-					if (isNaN(rawValue)) {
+					if (isNaN(numericData)) {
 						return data;
 					}
 					
-					let activeUnit = currentColumnUnits[colIdx] || { value: 1, label: 'Error unit' };
-					let displayedValue = rawValue * activeUnit.value;
-
 					if (type === 'display') {
-						return displayLatexNumber(displayedValue, 2);
+						return displayLatexNumber(numericData, 2);
 					} else if (type === 'export') {
-						return displayedValue.toExponential(2);
+						return numericData.toExponential(2);
 					}
 					
                     return data;
@@ -243,55 +238,8 @@ $(document).ready(function() {
 								'<option value="' + d + '">' + d + '</option>'
 							);
 						});
-				} else if (numberColumnIndexes.includes(colIdx)) {
-					
-					const allUnitsConfig = {
-						3: [
-							{ value: 1, label: 'Dimensionless' }
-						],
-						4: [
-							{ value: 1, label: 'Planck energy' },
-							{ value: 1.22e28, label: 'eV' },
-							{ value: 1.22e19, label: 'GeV' }
-						],
-						5: [
-							{ value: 1, label: 'Planck energy' },
-							{ value: 1.22e28, label: 'eV' },
-							{ value: 1.22e19, label: 'GeV' }
-						]
-					};
-					
-					const unitsForColumn = allUnitsConfig[colIdx];
-					
-					if (!currentColumnUnits[colIdx]) {
-						currentColumnUnits[colIdx] = unitsForColumn[0];
-					}
-					
-					var select = $('<select>')
-						.appendTo(filterCell)
-						.on('change', function () {
-							
-							let selectedValue = $(this).val();
-							let selectedUnit = unitsForColumn.find(unit => String(unit.value) === selectedValue);
-							
-							if (selectedUnit) {
-								currentColumnUnits[colIdx] = selectedUnit;
-							} else {
-								currentColumnUnits[colIdx] = { value: 1, label: 'Error Unit' };
-							}
-							
-							table.rows().invalidate().draw();
-														
-						});
-					
-						unitsForColumn.forEach(unit => {
-							select.append(`<option value="${unit.value}" ${unit.value === currentColumnUnits[colIdx].value ? 'selected' : ''}>${unit.label}</option>`);
-						});
-					
 				} else {
-					
 					filterCell.html('&nbsp;');
-					
 				}
 			});
 		}
