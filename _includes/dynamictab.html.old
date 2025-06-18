@@ -1,33 +1,18 @@
 <!--Static table from csv file-->
-
-{% assign numericColumnIndices = "3,4,5" | split: "," %}
-{% assign inspireColumnIndices = "6" | split: "," %}
-
 <table id="datatable" class="display">
 	<thead>
 		<tr>
-		{% for pair in site.data.database[0] %}
-			<th>{{ pair[0] }}</th>
-		{% endfor %}
+			{% for pair in site.data.database[0] %}
+				<th>{{ pair[0] }}</th>
+			{% endfor %}
 		</tr>
 	</thead>
 	<tbody>
 	{% for row in site.data.database %}
 		<tr>
-		{% for pair in row %}
-			{% assign colIdx = forloop.index0 %}
-			{% assign cellClass = "string" %}
-			
-			{% if numericColumnIndices contains colIdx %}
-				{% assign cellClass = "number" %}
-			{% endif %}
-			
-			{% if inspireColumnIndices contains colIdx %}
-				{% assign cellClass = "inspire" %}
-			{% endif %}
-			
-			<td class="{{ cellClass }}">{{ pair[1] }}</td>
-		{% endfor %}
+			{% for pair in row %}
+				<td>{{ pair[1] }}</td>
+			{% endfor %}
 		</tr>
 	{% endfor %}
 	</tbody>
