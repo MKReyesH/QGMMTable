@@ -110,7 +110,9 @@ $(document).ready(function() {
 				"render": function (data, type, row, meta) {
 					
 					if (type === 'display') {
-						return data;
+						const encodedData = encodeURIComponent(data);
+						const inspireUrl = `https://inspirehep.net/literature/${encodedData}`;
+						return `<a href="${inspireUrl}">${data}</a>`;
 					}
 					
                     return data;
