@@ -233,39 +233,43 @@ $(document).ready(function() {
 			bottomEnd: 'paging'
 		},
 
-    "columnDefs": [
-        {
-            "targets": numberColumnIndexes, // This should still work to apply to multiple columns
-            "type": "num",
-            "render": function (data, type, row, meta) {
-                // ****** VERY SIMPLE TEST RENDER FUNCTION ******
-                console.log(`RENDER TEST HIT for col: ${meta.col}, type: ${type}. Data: ${data}`);
-                if (type === 'display') {
-                    // Just return the original data with a prefix, to see if it renders at all
-                    return `TEST: ${data}`;
-                }
-                return data; // For sort/export, return original
-            }
-        },
-        // IMPORTANT: If you have other columnDefs for different targets, list them separately.
-        // Make sure no other columnDef is accidentally overriding these targets.
-        {
-            // Column 6 (Inspire ID) - this needs to be a separate columnDef since it's not a 'numberColumnIndex'
-            "targets": inspireColumnIndexes,
-            "render": function(data, type, row, meta) {
-                if (type === 'display') {
-                    // Only modify for display, keep original for export/sort
-                    var currentRecid = row[inspireColumnIndexes[0]]; // Assuming inspireColumnIndexes has one element
-                    if (currentRecid && $(`#bib-recid-${currentRecid}`).length) {
-                        return `<a href="#bib-recid-${currentRecid}">${currentRecid}</a>`;
+ 		"columnDefs": [
+			{	//Rendering for number columns
+				"targets": numberColumnIndexes,
+				"type": "num",
+				"render": function (data, type, row, meta) {
+                    console.log(`RENDER TEST HIT for col: ${meta.col}, type: ${type}. Data: ${data}`);
+
+					let numericData = parseFloat(data);
+					if (isNaN(numericData)) {
+						return data;
+					}
+
+					const colIdx = meta.col;
+
+                    // ****** REMOVE THE OUTER if (type === 'display') TEMPORARILY ******
+                    // Just run the conversion directly for all types for debugging
+                    const currentUnitKey = getCurrentUnit(colIdx);
+                    const unitDefinitions = unitConversions[colIdx].units;
+                    const unitInfo = unitDefinitions[currentUnitKey];
+
+                    console.log(`Current Unit Key for col ${colIdx}: ${currentUnitKey}`);
+                    console.log(`Unit Info for col ${colIdx}:`, unitInfo);
+
+
+                    if (unitInfo && typeof unitInfo.factor === 'number') {
+                        const convertedValue = numericData * unitInfo.factor;
+                        console.log(`Converted Value for col ${colIdx}: ${convertedValue}`);
+                        // Always return the MathJax formatted string for all types (temporarily)
+                        return displayLatexNumber(convertedValue, 2, unitInfo.display);
+                    } else {
+                        console.warn(`Unit conversion failed for column ${colIdx}, unit ${currentUnitKey}. UnitInfo invalid.`);
+                        // Always return the default MathJax formatted string
+                        return displayLatexNumber(numericData, 2, '');
                     }
                 }
-                return data; // Return original for sort/export, or if not found
             }
-        },
-        // Add other columnDefs here if you have any for other column types
-        // e.g., default string rendering for other text columns if needed
-    ],
+        ],
     
 		"drawCallback": function( settings ) {
 			if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
