@@ -354,7 +354,7 @@ $(document).ready(function() {
 						.on('change', function () {
 							// DataTables 2.0+ way to trigger re-rendering:
 							// Simply redraw the table. The render function for affected cells will be re-evaluated.
-							console.log(`Unit dropdown for column ${colIdx} changed to: <span class="math-inline">\{</span>(this).val()}`);
+							console.log(`Unit dropdown for column ${colIdx} changed to: ${$(this).val()}`);
 							api.draw(); // CORRECTED LINE
 						});
 
