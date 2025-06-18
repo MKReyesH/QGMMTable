@@ -60,8 +60,7 @@ $(document).ready(function() {
 			return `$${mantissa}$`;
 		}
 		
-		let exponentSign = exponent >= 0 ? '+' : '';
-		return `$${mantissa} \\times 10^{${exponentSign}${exponent}}$`;
+		return `$${mantissa} \\times 10^{${exponent}}$`;
 	}
 
 	//Dynamic table rendering
