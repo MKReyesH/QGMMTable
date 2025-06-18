@@ -271,8 +271,8 @@ $(document).ready(function() {
 						.appendTo(filterCell)
 						.on('change', function () {
 							
-							let selectedValue = parseFloat($(this).val());
-							let selectedUnit = unitsForColumn.find(unit => unit.value === selectedValue);
+							let selectedValue = $(this).val();
+							let selectedUnit = unitsForColumn.find(unit => String(unit.value) === selectedValue);
 							
 							if (selectedUnit) {
 								currentColumnUnits[colIdx] = selectedUnit;
