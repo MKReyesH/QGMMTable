@@ -280,8 +280,7 @@ $(document).ready(function() {
 								currentColumnUnits[colIdx] = { value: 1, label: 'Error Unit' };
 							}
 							
-							let currentColumnApi = api.column(colIdx);
-							currentColumnApi.invalidate('data').draw();
+							table.rows().invalidate().draw();
 														
 						});
 					
