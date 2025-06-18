@@ -1,9 +1,13 @@
-Messengers, Luminality, Effects, delta(0), ELIV(1), ELIV(2), InspireID
-Gamma rays, +, Pair decay, 2.23e-26, 1.6, 1.00e+2, 2901890
-Gamma rays, -, Splitting, 1.45, 0.7, 0.9, 2776407
-Neutrinos, +, Splitting, N/A, 8, 0.0, 2729212
-Neutrinos, +, Splitting, N/A, 8, 0.0, 2712723
-Neutrinos, +, Splitting, N/A, 8, 0.0, 2675222
-Cosmic rays, +, Splitting, N/A, 8, 0.0, 2675222
-Cosmic rays, +, Splitting, N/A, 8, 0.0, 2603276
-Cosmic rays, +, Splitting, N/A, 8, 0.0, 2624694
+Messengers, Luminality, Effects, delta(0), ELIV(1)/EPl, ELIV(2))/EPl, InspireID
+Gamma rays, NA, Birefrigence, NA, 1e-16, NA, 1311435
+Gamma rays, +, Time delays, , 9.02, 5.74e-8, 2756998
+Gamma rays, -, Time delays, , 8.20, 5.66e-8, 2756998
+Gamma rays, +, Pair decay, , 1.39e5, 1.17e-4, 1863649
+Gamma rays, +, Pair decay, , 1.16e5, 1.04e-4, 1869962
+Gamma rays, +, Splitting, NA, , 1.81e-3, 1869962
+Gamma rays, -, Breit-Wheeler, , 4.70, 1.17e-7, 1701232
+Gamma rays, -, Bethe-Heitler, , , 1.72e-8, 1500959
+Neutrinos, NA, Oscillations, 2.8e-27, , , 930440
+Neutrinos, -, Time delays, 2.5e-18, 1.23e2, 3.44e-7, 1434280
+Neutrinos, +, Pair emission, 1.8e-21, , , 2890924
+Neutrinos, +, Splitting, NA, 4.34e10, 0.9, 2879713
