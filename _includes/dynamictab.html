@@ -234,6 +234,33 @@ $(document).ready(function() {
 		}
 
  	});
+ 	
+ 	$('#inspireApiContent').on('click', 'a[href^="#bib-recid-"]', function(e) {
+ 		
+		var targetId = $(this).attr('href');
+		var $targetElement = $(targetId);
+		
+		if ($targetElement.length) {
+			 $('.highlight-bibliography').removeClass('highlight-bibliography');
+			 $targetElement.addClass('highlight-bibliography');
+			 
+			 setTimeout(function() {
+			 	$targetElement.removeClass('highlight-bibliography');
+			 }, 3000);
+			 
+		}
+		
+ 	}
  
  });
 </script>
+
+<style>
+.highlight-bibliography {
+    background-color: #ffffe0; /* Light yellow background */
+    border: 2px solid #ffcc00; /* Orange border */
+    padding: 10px; /* Some padding to make it stand out */
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.5); /* Soft glow */
+    transition: background-color 0.5s ease-out, border-color 0.5s ease-out, box-shadow 0.5s ease-out; /* Smooth transition */
+}
+</style>
