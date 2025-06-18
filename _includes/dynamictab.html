@@ -187,15 +187,14 @@ $(document).ready(function() {
 				"type": "num",
 				"render": function (data, type, row, meta) {
 					let colIdx = meta.col;
-					let numericData = parseFloat(row[meta.col]);
+					let rawValue = parseFloat(row[colIdx]);
 					
-					if (isNaN(numericData)) {
+					if (isNaN(rawValue)) {
 						return data;
 					}
 					
-					let colIdx = meta.col;
 					let activeUnit = currentColumnUnits[colIdx] || { value: 1, label: 'Error unit' };
-					let displayedValue = numericData * activeUnit.value;
+					let displayedValue = rawValue * activeUnit.value;
 
 					if (type === 'display') {
 						return displayLatexNumber(displayedValue, 2);
