@@ -31,6 +31,8 @@
 }
 </style>
 <script>
+var myDataTable; 
+
 $(document).ready(function() {
 
 	//Columns with LaTeX number rendering
@@ -53,11 +55,11 @@ $(document).ready(function() {
 		3: { // Column index 3
 			default: 'm', // Default unit for display (should ideally be the base unit of your data)
 			units: {
-				'm': { display: 'm', factor: 1 },         // 1 meter * 1 = 1 meter
-				'cm': { display: 'cm', factor: 100 },     // 1 meter * 100 = 100 cm
-				'mm': { display: 'mm', factor: 1000 },    // 1 meter * 1000 = 1000 mm
-				'km': { display: 'km', factor: 0.001 },   // 1 meter * 0.001 = 0.001 km
-				'in': { display: 'in', factor: 39.3701 }  // 1 meter * 39.3701 = 39.3701 inches
+				'm': { display: 'm', factor: 1 },
+				'cm': { display: 'cm', factor: 100 },
+				'mm': { display: 'mm', factor: 1000 },
+				'km': { display: 'km', factor: 0.001 },
+				'in': { display: 'in', factor: 39.3701 }
 			}
 		},
 		// Example: Column 4 might be 'Mass' (assuming original data from CSV is in kilograms)
@@ -66,7 +68,7 @@ $(document).ready(function() {
 			units: {
 				'kg': { display: 'kg', factor: 1 },
 				'g': { display: 'g', factor: 1000 },
-				'lb': { display: 'lb', factor: 2.20462 } // 1 kg = 2.20462 pounds
+				'lb': { display: 'lb', factor: 2.20462 }
 			}
 		},
 		// Example: Column 5 might be 'Time' (assuming original data from CSV is in seconds)
@@ -79,8 +81,6 @@ $(document).ready(function() {
 				'hr': { display: 'hr', factor: 1/3600 }
 			}
 		}
-		// Add more numeric column definitions as needed.
-		// IMPORTANT: Ensure your original data's unit aligns with the 'factor: 1' unit for each column.
 	};
 
 	// --- Function to get the current unit for a column ---
@@ -104,7 +104,6 @@ $(document).ready(function() {
 
         let actualPrecision = precision;
         if (Math.abs(num) > 0 && Math.abs(num) < 0.001) {
-            // Use scientific notation, `precision` will apply to mantissa
         } else if (Math.abs(num) >= 0.001 && Math.abs(num) < 10000) {
             if (num % 1 === 0) {
                 actualPrecision = 0;
@@ -123,8 +122,8 @@ $(document).ready(function() {
 	}
 
 	//Dynamic table rendering
-	// ****** RENAMED 'table' to 'myDataTable' ******
-	var myDataTable = $('#datatable').DataTable({
+	// ****** ASSIGN TO THE GLOBALLY DECLARED myDataTable ******
+	myDataTable = $('#datatable').DataTable({
 
 		"lengthChange": false,
 		"pageLength": rowsPerPage,
@@ -239,9 +238,9 @@ $(document).ready(function() {
 				"targets": numberColumnIndexes,
 				"type": "num", // Essential for numerical sorting
 				"render": function (data, type, row, meta) {
-					
-					console.log(`RENDER FUNCTION HIT for col: ${meta.col}, type: ${type}`);
-					
+                    // ****** ADDED RENDER HIT LOG ******
+                    console.log(`RENDER FUNCTION HIT for col: ${meta.col}, type: ${type}`);
+
 					let numericData = parseFloat(data);
 
 					if (isNaN(numericData)) {
@@ -250,7 +249,6 @@ $(document).ready(function() {
 
 					const colIdx = meta.col;
 
-                    // Debugging logs:
                     console.log(`--- Render for col: ${colIdx}, type: ${type} ---`);
                     console.log(`Original data: ${data}, numericData: ${numericData}`);
                     console.log(`Is numeric column? ${numberColumnIndexes.includes(colIdx)}`);
@@ -298,7 +296,7 @@ $(document).ready(function() {
 		},
 
 		initComplete: function () {
-			var api = this.api(); // 'this.api()' correctly gets the instance's API
+			var api = this.api();
 			var thead = $(api.table().header());
 			var filterRow = $('<tr>').appendTo(thead);
 
@@ -331,8 +329,11 @@ $(document).ready(function() {
 						.on('change', function () {
 							console.log(`Unit dropdown for column ${colIdx} changed to: ${$(this).val()}`);
 
-							api.draw(); // This `api` variable is correctly scoped here
-                            console.log(`DEBUG: api.draw() for column ${colIdx} has been called.`);
+							// api.draw(); // Original working line if `api` is valid
+                            // We are trying this specific call for diagnosis
+                            api.column(colIdx).nodes().to$().draw(); // This might force specific column redraw
+
+                            console.log(`DEBUG: draw() call for column ${colIdx} initiated.`);
                             if (typeof MathJax !== 'undefined' && typeof MathJax.typesetPromise !== 'undefined') {
                                 MathJax.typesetPromise();
                                 console.log('DEBUG: MathJax.typesetPromise() explicitly called after draw.');
