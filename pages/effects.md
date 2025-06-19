@@ -2,35 +2,42 @@
 title: Effects
 ---
 
+# Birefrigence
+
+One can insert `latex` equations in-line, like $x^2+y^2=r^2$, or in their own line, like
+
+$$x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}$$
+
+This is an *italic text* and **bold text**. One can also insert an unsorted list
+
+- Element
+- Element
+- Element
+
+And a sorted list:
+
+1. Element 1
+2. Element 2
+3. Element 3
+
+One can also insert a quote:
+
+> "Si está en internet, debe ser cierto..." - Abraham Lincoln
+
+One can also insert `in-line code`. But one can also insert code with highlighted syntax
+
+``` c++
+int suma (){
+  int a, b;
+  return a+b;
+}
+```
+
+Finally, one can also insert `html` code directly:
+
+<iframe width="448" height="252" src="https://www.youtube.com/embed/..." frameborder="0" allowfullscreen></iframe>
+
+# Time delays
+
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non dolor maximus, volutpat metus et, vehicula sem. Proin nisi tellus, fermentum et ullamcorper at, efficitur nec mauris. Nulla sodales pellentesque nibh, at pellentesque velit scelerisque a. Nulla ac neque sed ipsum mattis congue. Vivamus id lobortis sapien, hendrerit bibendum mi. Nullam magna mauris, vehicula sed dignissim eu, pulvinar et lacus. Sed vitae mollis mi. Aliquam magna ex, consequat quis pharetra sit amet, tristique nec arcu. Morbi purus odio, fermentum sit amet tincidunt eu, finibus egestas enim. Aliquam erat volutpat. Pellentesque at lacus vitae sem posuere convallis vitae et augue. Donec sit amet cursus sem.
-
-Fusce scelerisque interdum purus, id egestas dolor eleifend eget. Mauris augue sem, scelerisque eget ligula eu, malesuada suscipit lorem. Nullam vel mi placerat, lacinia libero nec, ornare leo. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras vehicula, sapien ut fringilla tristique, eros lorem semper diam, ut bibendum libero sapien at odio. Mauris condimentum nulla vel tristique pulvinar. Pellentesque malesuada congue porttitor. Etiam et ante id sapien ullamcorper blandit vitae sed nulla. Morbi id arcu ac metus efficitur ultricies. Sed et laoreet quam. Suspendisse congue egestas nisi ac condimentum. In hac habitasse platea dictumst. Nam hendrerit et tellus sit amet porttitor. Nam pellentesque eu ipsum non convallis. Nulla eu viverra sem, a lacinia arcu. Praesent vel laoreet lacus.
-
-Morbi auctor lectus egestas porttitor dictum. Fusce vel sem vel massa laoreet maximus. Nullam maximus dui quam, sed aliquam dui mattis non. Nam lacinia varius ligula, a accumsan lectus. Vivamus sed velit risus. Praesent ut nisl a mauris vulputate vulputate at sed augue. Morbi porta dolor a dictum dignissim.
-
-Duis eleifend, justo a egestas vehicula, nunc felis elementum leo, at rutrum nulla quam eu tortor. Sed commodo mi ut leo fringilla, quis semper purus viverra. Phasellus et augue nec augue tincidunt blandit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Suspendisse gravida vulputate nibh in consequat. Nullam sit amet lectus sed enim ultricies laoreet. Donec non porta urna. Nulla a dui quis elit pulvinar iaculis. Fusce vitae dui suscipit ligula malesuada egestas ut vitae augue. Aenean ac convallis ipsum, vitae gravida odio. Vestibulum metus lacus, efficitur vel iaculis sed, scelerisque at lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-
-Sed sollicitudin leo ipsum, id elementum lectus pharetra id. Suspendisse vestibulum turpis a luctus lacinia. Donec egestas mauris et lacinia volutpat. Proin ullamcorper nisl at diam tempus, eget ornare lectus bibendum. Sed ultrices tellus libero, a lobortis leo sollicitudin sit amet. Pellentesque eu rhoncus ipsum. Nullam sit amet semper purus. Aliquam ullamcorper a neque at ultricies. Duis in purus odio. Curabitur quam leo, egestas commodo suscipit a, ultrices non metus. Phasellus mattis et nisi facilisis cursus. Pellentesque augue quam, ullamcorper id porta ut, aliquet eget orci.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non dolor maximus, volutpat metus et, vehicula sem. Proin nisi tellus, fermentum et ullamcorper at, efficitur nec mauris. Nulla sodales pellentesque nibh, at pellentesque velit scelerisque a. Nulla ac neque sed ipsum mattis congue. Vivamus id lobortis sapien, hendrerit bibendum mi. Nullam magna mauris, vehicula sed dignissim eu, pulvinar et lacus. Sed vitae mollis mi. Aliquam magna ex, consequat quis pharetra sit amet, tristique nec arcu. Morbi purus odio, fermentum sit amet tincidunt eu, finibus egestas enim. Aliquam erat volutpat. Pellentesque at lacus vitae sem posuere convallis vitae et augue. Donec sit amet cursus sem.
-
-Fusce scelerisque interdum purus, id egestas dolor eleifend eget. Mauris augue sem, scelerisque eget ligula eu, malesuada suscipit lorem. Nullam vel mi placerat, lacinia libero nec, ornare leo. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras vehicula, sapien ut fringilla tristique, eros lorem semper diam, ut bibendum libero sapien at odio. Mauris condimentum nulla vel tristique pulvinar. Pellentesque malesuada congue porttitor. Etiam et ante id sapien ullamcorper blandit vitae sed nulla. Morbi id arcu ac metus efficitur ultricies. Sed et laoreet quam. Suspendisse congue egestas nisi ac condimentum. In hac habitasse platea dictumst. Nam hendrerit et tellus sit amet porttitor. Nam pellentesque eu ipsum non convallis. Nulla eu viverra sem, a lacinia arcu. Praesent vel laoreet lacus.
-
-Morbi auctor lectus egestas porttitor dictum. Fusce vel sem vel massa laoreet maximus. Nullam maximus dui quam, sed aliquam dui mattis non. Nam lacinia varius ligula, a accumsan lectus. Vivamus sed velit risus. Praesent ut nisl a mauris vulputate vulputate at sed augue. Morbi porta dolor a dictum dignissim.
-
-Duis eleifend, justo a egestas vehicula, nunc felis elementum leo, at rutrum nulla quam eu tortor. Sed commodo mi ut leo fringilla, quis semper purus viverra. Phasellus et augue nec augue tincidunt blandit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Suspendisse gravida vulputate nibh in consequat. Nullam sit amet lectus sed enim ultricies laoreet. Donec non porta urna. Nulla a dui quis elit pulvinar iaculis. Fusce vitae dui suscipit ligula malesuada egestas ut vitae augue. Aenean ac convallis ipsum, vitae gravida odio. Vestibulum metus lacus, efficitur vel iaculis sed, scelerisque at lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-
-Sed sollicitudin leo ipsum, id elementum lectus pharetra id. Suspendisse vestibulum turpis a luctus lacinia. Donec egestas mauris et lacinia volutpat. Proin ullamcorper nisl at diam tempus, eget ornare lectus bibendum. Sed ultrices tellus libero, a lobortis leo sollicitudin sit amet. Pellentesque eu rhoncus ipsum. Nullam sit amet semper purus. Aliquam ullamcorper a neque at ultricies. Duis in purus odio. Curabitur quam leo, egestas commodo suscipit a, ultrices non metus. Phasellus mattis et nisi facilisis cursus. Pellentesque augue quam, ullamcorper id porta ut, aliquet eget orci.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non dolor maximus, volutpat metus et, vehicula sem. Proin nisi tellus, fermentum et ullamcorper at, efficitur nec mauris. Nulla sodales pellentesque nibh, at pellentesque velit scelerisque a. Nulla ac neque sed ipsum mattis congue. Vivamus id lobortis sapien, hendrerit bibendum mi. Nullam magna mauris, vehicula sed dignissim eu, pulvinar et lacus. Sed vitae mollis mi. Aliquam magna ex, consequat quis pharetra sit amet, tristique nec arcu. Morbi purus odio, fermentum sit amet tincidunt eu, finibus egestas enim. Aliquam erat volutpat. Pellentesque at lacus vitae sem posuere convallis vitae et augue. Donec sit amet cursus sem.
-
-Fusce scelerisque interdum purus, id egestas dolor eleifend eget. Mauris augue sem, scelerisque eget ligula eu, malesuada suscipit lorem. Nullam vel mi placerat, lacinia libero nec, ornare leo. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras vehicula, sapien ut fringilla tristique, eros lorem semper diam, ut bibendum libero sapien at odio. Mauris condimentum nulla vel tristique pulvinar. Pellentesque malesuada congue porttitor. Etiam et ante id sapien ullamcorper blandit vitae sed nulla. Morbi id arcu ac metus efficitur ultricies. Sed et laoreet quam. Suspendisse congue egestas nisi ac condimentum. In hac habitasse platea dictumst. Nam hendrerit et tellus sit amet porttitor. Nam pellentesque eu ipsum non convallis. Nulla eu viverra sem, a lacinia arcu. Praesent vel laoreet lacus.
-
-Morbi auctor lectus egestas porttitor dictum. Fusce vel sem vel massa laoreet maximus. Nullam maximus dui quam, sed aliquam dui mattis non. Nam lacinia varius ligula, a accumsan lectus. Vivamus sed velit risus. Praesent ut nisl a mauris vulputate vulputate at sed augue. Morbi porta dolor a dictum dignissim.
-
-Duis eleifend, justo a egestas vehicula, nunc felis elementum leo, at rutrum nulla quam eu tortor. Sed commodo mi ut leo fringilla, quis semper purus viverra. Phasellus et augue nec augue tincidunt blandit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Suspendisse gravida vulputate nibh in consequat. Nullam sit amet lectus sed enim ultricies laoreet. Donec non porta urna. Nulla a dui quis elit pulvinar iaculis. Fusce vitae dui suscipit ligula malesuada egestas ut vitae augue. Aenean ac convallis ipsum, vitae gravida odio. Vestibulum metus lacus, efficitur vel iaculis sed, scelerisque at lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-
-Sed sollicitudin leo ipsum, id elementum lectus pharetra id. Suspendisse vestibulum turpis a luctus lacinia. Donec egestas mauris et lacinia volutpat. Proin ullamcorper nisl at diam tempus, eget ornare lectus bibendum. Sed ultrices tellus libero, a lobortis leo sollicitudin sit amet. Pellentesque eu rhoncus ipsum. Nullam sit amet semper purus. Aliquam ullamcorper a neque at ultricies. Duis in purus odio. Curabitur quam leo, egestas commodo suscipit a, ultrices non metus. Phasellus mattis et nisi facilisis cursus. Pellentesque augue quam, ullamcorper id porta ut, aliquet eget orci.
-
-## Time delays
-
-bla bla bla
 
