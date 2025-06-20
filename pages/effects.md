@@ -52,23 +52,6 @@ int suma (){
 }
 ```
 
-One can make Top-Down flowcharts
-
-```mermaid
-graph TD;
-    A-->B;
-    A-->C;
-```
-and Left-Right flowcharts
-
-```mermaid
-graph LR;
-    A-->B;
-    C-->D;
-    B-->E;
-    D-->E;
-```
-
 This is an internal link to [another section in the same page](#this-is-a-section).
 This is an external link to [Google](https://www.google.com/).
 
