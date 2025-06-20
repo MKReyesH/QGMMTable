@@ -1,3 +1,12 @@
+url: "https://mkreyesh.github.io" 
+baseurl: "/QGMMTable" 
+
+markdown: kramdown
+kramdown:
+  math_engine: mathjax
+  math_engine_opts:
+    enable_dollar_delimiter: true
+
 remote_theme: pages-themes/cayman@v0.2.0
 
 plugins:
