@@ -1,6 +1,3 @@
-url: "https://mkreyesh.github.io" 
-baseurl: "/QGMMTable" 
-
 markdown: kramdown
 kramdown:
   math_engine: mathjax
