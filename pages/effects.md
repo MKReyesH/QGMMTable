@@ -52,8 +52,8 @@ int suma (){
 }
 ```
 
-This is an internal link to [another section in the same page](#this-is-a-section).
-This is an external link to [Google](https://www.google.com/).
+This is an internal link to [a section in the same page](#this-is-a-section).
+This is an external link to [a section in another page](https://mkreyesh.github.io/QGMMTable/pages/about#designers).
 
 Finally, one can also insert HTML code directly:
 
