@@ -4,7 +4,7 @@ title: About
 
 # Designers
 
-- [Maykoll A. Reyes](https://github.com/MKReyesH)
+- Authors
 
 # Licenses
 
